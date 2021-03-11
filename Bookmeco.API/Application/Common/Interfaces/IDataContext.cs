@@ -1,4 +1,6 @@
-﻿using Domain.Entities;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Common.Interfaces
@@ -7,5 +9,8 @@ namespace Application.Common.Interfaces
     {
          DbSet<ServiceProvider> ServiceProviders { get; set; }
          DbSet<ServiceCategory> ServiceCategories { get; set; }
+
+         int SaveChanges();
+         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken));
     }
 }
