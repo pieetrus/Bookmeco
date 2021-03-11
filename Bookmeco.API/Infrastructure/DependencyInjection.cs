@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,7 +10,7 @@ namespace Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services,
             IConfiguration configuration)
         {
-            services.AddDbContext<DbContext>(options =>
+            services.AddDbContext<DataContext>(options =>
                 options.UseSqlite(configuration.GetConnectionString("DefaultConnection")));
 
             return services;
