@@ -11,6 +11,7 @@ namespace Domain.Entities
     public class ScheduleDay
     {
         public int Id { get; set; }
+        public int ScheduleId { get; set; }
         public DateTime BeginTime { get; set; }
         public DateTime EndTime { get; set; }
         public Schedule Schedule { get; set; }
