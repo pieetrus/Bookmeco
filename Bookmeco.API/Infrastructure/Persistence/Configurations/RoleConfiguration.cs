@@ -8,12 +8,6 @@ namespace Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<Role> builder)
         {
-            builder.Property(e => e.Name)
-                .IsRequired()
-                .HasMaxLength(50);
-
-            builder.Property(e => e.AccessLevel)
-                .IsRequired();
         }
     }
 }

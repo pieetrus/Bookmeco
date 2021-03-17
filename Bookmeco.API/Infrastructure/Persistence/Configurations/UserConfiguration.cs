@@ -8,13 +8,13 @@ namespace Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.Property(e => e.Username)
+            builder.Property(e => e.UserName)
                 .IsRequired()
                 .HasMaxLength(60);
 
-            builder.Property(e => e.Password)
-                .HasMaxLength(60)
-                .IsRequired();
+            builder.Property(e => e.Email)
+                .IsRequired()
+                .HasMaxLength(60);
         }
     }
 }

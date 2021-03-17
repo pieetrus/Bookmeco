@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Domain.Common;
 using Domain.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Persistence
 {
-    public class DataContext : DbContext, IDataContext
+    public class DataContext : IdentityDbContext<User, Role, int>, IDataContext
     {
         public DataContext(DbContextOptions options) : base(options)
         {
@@ -51,6 +52,7 @@ namespace Infrastructure.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(DataContext).Assembly);
         }
     }

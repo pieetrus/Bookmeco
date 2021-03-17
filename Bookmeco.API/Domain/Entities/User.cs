@@ -1,14 +1,14 @@
-﻿using Domain.Common;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 
 namespace Domain.Entities
 {
-    public class User : AuditableEntity
+    public class User : IdentityUser<int>
     {
-        public int Id { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
         public List<Role> Roles { get; set; }
         public List<ServiceCategory> ServiceCategories { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime? ModifiedAt { get; set; }
     }
 }

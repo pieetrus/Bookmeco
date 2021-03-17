@@ -1,4 +1,5 @@
-﻿using Domain.Common;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 
 namespace Domain.Entities
@@ -9,11 +10,11 @@ namespace Domain.Entities
     /// Admin, std User, System access only.
     /// Each user is allow to has many roles. 
     /// </summary>
-    public class Role : AuditableEntity
+    public class Role : IdentityRole<int>
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
         public int AccessLevel { get; set; }
         public List<User> Users { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime? ModifiedAt { get; set; }
     }
 }

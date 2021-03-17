@@ -1,10 +1,12 @@
-using System;
+using Domain.Entities;
 using Infrastructure.Persistence;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace API
 {
@@ -21,8 +23,9 @@ namespace API
             try
             {
                 var context = services.GetRequiredService<DataContext>();
+                var userManager = services.GetRequiredService<UserManager<User>>();
                 context.Database.Migrate(); // create database if don't exist yet and apply migrations
-                Seed.SeedData(context).Wait(); // seed database with sample data
+                Seed.SeedData(context, userManager).Wait(); // seed database with sample data
             }
             catch (Exception e)
             {
