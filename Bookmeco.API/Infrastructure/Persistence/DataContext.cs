@@ -22,10 +22,10 @@ namespace Infrastructure.Persistence
         public DbSet<Opinion> Opinions { get; set; }
         public DbSet<PersonData> PersonsData { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
-        public DbSet<Role> Roles { get; set; }
+        public override DbSet<Role> Roles { get; set; }
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<ScheduleDay> ScheduleDays { get; set; }
-        public DbSet<User> Users { get; set; }
+        public override DbSet<User> Users { get; set; }
         public DbSet<UserCompany> UserCompanies { get; set; }
         public DbSet<UserCompanyAccessType> UserCompanyAccessTypes { get; set; }
 

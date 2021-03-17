@@ -23,7 +23,14 @@ namespace API
         {
             services.AddInfrastructure(Configuration);
             services.AddApplication();
-            services.AddControllers();
+
+            services.AddControllers()
+                .AddNewtonsoftJson(opt =>
+                {
+                    // block object cycles
+                    opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                }); ;
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });

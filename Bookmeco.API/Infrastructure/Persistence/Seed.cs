@@ -15,21 +15,25 @@ namespace Infrastructure.Persistence
 
             if (!userManager.Users.Any())
             {
+
+                var adminRole = new Role { Name = "Admin", NormalizedName = "ADMIN" };
+                var userRole = new Role { Name = "User", NormalizedName = "USER" };
+
                 var users = new List<User>
                 {
                     new User
                     {
                         UserName = "admin",
-                        Email = "admin@admin.com"
+                        Email = "admin@admin.com",
+                        Roles = new List<Role>{ adminRole }
                     },
                     new User
                     {
                         UserName = "user",
-                        Email = "user@user.com"
+                        Email = "user@user.com",
+                        Roles = new List<Role>{ userRole }
                     }
                 };
-                var adminRole = new Role { Name = "Admin", NormalizedName = "ADMIN" };
-                var userRole = new Role { Name = "User", NormalizedName = "USER" };
 
                 context.Roles.AddRange(adminRole, userRole);
 
@@ -38,8 +42,6 @@ namespace Infrastructure.Persistence
                     await userManager.CreateAsync(user, "123");
                 }
 
-                await userManager.AddToRoleAsync(users[0], "ADMIN");
-                await userManager.AddToRoleAsync(users[1], "USER");
 
                 somethingAdded = true;
             }

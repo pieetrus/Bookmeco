@@ -1,5 +1,6 @@
 ﻿using Application.Users;
 using Application.Users.Commands.Register;
+using Application.Users.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -8,12 +9,12 @@ namespace API.Controllers
 {
     public class UsersController : BaseController
     {
-        //[AllowAnonymous]
-        //[HttpPost("login")]
-        //public async Task<ActionResult<User>> Login(LoginQuery query)
-        //{
-        //    return await Mediator.Send(query);
-        //}
+        [AllowAnonymous]
+        [HttpPost("login")]
+        public async Task<ActionResult<UserDto>> Login(LoginQuery query)
+        {
+            return await Mediator.Send(query);
+        }
 
         [AllowAnonymous]
         [HttpPost("register")]
