@@ -1,9 +1,11 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.DTOs;
 using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,14 +13,12 @@ namespace Application.Users.Queries
 {
     public class LoginQueryHandler : IRequestHandler<LoginQuery, UserDto>
     {
-        public UserManager<User> _userManager { get; }
         private readonly IDataContext _context;
         private readonly SignInManager<User> _signInManager;
         private readonly IJwtGenerator _jwtGenerator;
 
-        public LoginQueryHandler(IDataContext context, UserManager<User> userManager, SignInManager<User> signInManager, IJwtGenerator jwtGenerator)
+        public LoginQueryHandler(IDataContext context, SignInManager<User> signInManager, IJwtGenerator jwtGenerator)
         {
-            _userManager = userManager;
             _context = context;
             _signInManager = signInManager;
             _jwtGenerator = jwtGenerator;
@@ -41,7 +41,7 @@ namespace Application.Users.Queries
                 {
                     Username = user.UserName,
                     Token = _jwtGenerator.CreateToken(user),
-                    Roles = user.Roles
+                    Roles = user.Roles.Select(r => r.Name).ToList()
                 };
             }
 

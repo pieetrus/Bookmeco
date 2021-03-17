@@ -1,4 +1,6 @@
 using Application;
+using Application.Common.Interfaces;
+using FluentValidation.AspNetCore;
 using Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,12 +26,29 @@ namespace API
             services.AddInfrastructure(Configuration);
             services.AddApplication();
 
-            services.AddControllers()
+            services.AddControllers(
+                    //// TODO: UNCOMMENT IF U WANT TO ENABLE AUTHORIZATION
+                    //    opt =>
+                    //{
+                    //    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                    //    opt.Filters.Add(new AuthorizeFilter(policy));
+                    //}
+                    )
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<IDataContext>())
                 .AddNewtonsoftJson(opt =>
                 {
                     // block object cycles
                     opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-                }); ;
+                });
+
+            services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000") // here specify client app location
+                        .AllowCredentials();
+                });
+            });
 
             services.AddSwaggerGen(c =>
             {
@@ -50,6 +69,10 @@ namespace API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("CorsPolicy");
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

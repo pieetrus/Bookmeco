@@ -4,6 +4,7 @@ using Application.Users.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Application.DTOs;
 
 namespace API.Controllers
 {

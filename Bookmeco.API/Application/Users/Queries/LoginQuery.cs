@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Application.DTOs;
+using FluentValidation;
 using MediatR;
 
 namespace Application.Users.Queries
@@ -10,9 +11,9 @@ namespace Application.Users.Queries
 
     }
 
-    public class QueryValidator : AbstractValidator<LoginQuery>
+    public class LoginQueryValidator : AbstractValidator<LoginQuery>
     {
-        public QueryValidator()
+        public LoginQueryValidator()
         {
             RuleFor(x => x.UserName).NotEmpty();
             RuleFor(x => x.Password).NotEmpty();
