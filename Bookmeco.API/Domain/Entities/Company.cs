@@ -15,7 +15,7 @@ namespace Domain.Entities
         public double Longitude { get; set; }
         public double Latitude { get; set; }
         public CompanyContent Content { get; set; }
-        public List<Category> Categories { get; set; }
+        public List<CompanyCategory> Categories { get; set; }
         public List<User> Users { get; set; }
     }
 }

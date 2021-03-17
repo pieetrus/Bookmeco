@@ -14,7 +14,7 @@ namespace Infrastructure.Persistence
 
             if (!context.Categories.Any())
             {
-                var categoriesList = new List<Category> { new Category { Name = "Barber" }, new Category { Name = "Manicure" } };
+                var categoriesList = new List<CompanyCategory> { new CompanyCategory { Name = "Barber" }, new CompanyCategory { Name = "Manicure" } };
                 context.Categories.AddRange(categoriesList);
                 somethingAdded = true;
             }

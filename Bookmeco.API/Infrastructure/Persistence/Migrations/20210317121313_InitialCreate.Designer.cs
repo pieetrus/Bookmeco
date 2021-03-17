@@ -33,7 +33,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("CategoryCompany");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Category", b =>
+            modelBuilder.Entity("Domain.Entities.CompanyCategory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -197,7 +197,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int?>("PersonDataId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ReservationTime")
+                    b.Property<int>("ReservationDuration")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("ScheduleId")
@@ -396,7 +396,7 @@ namespace Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("CategoryCompany", b =>
                 {
-                    b.HasOne("Domain.Entities.Category", null)
+                    b.HasOne("Domain.Entities.CompanyCategory", null)
                         .WithMany()
                         .HasForeignKey("CategoriesId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -409,13 +409,13 @@ namespace Infrastructure.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Domain.Entities.Category", b =>
+            modelBuilder.Entity("Domain.Entities.CompanyCategory", b =>
                 {
-                    b.HasOne("Domain.Entities.Category", "SuperCategory")
+                    b.HasOne("Domain.Entities.CompanyCategory", "SuperCompanyCategory")
                         .WithMany()
                         .HasForeignKey("SuperCategoryId");
 
-                    b.Navigation("SuperCategory");
+                    b.Navigation("SuperCompanyCategory");
                 });
 
             modelBuilder.Entity("Domain.Entities.CompanyContent", b =>

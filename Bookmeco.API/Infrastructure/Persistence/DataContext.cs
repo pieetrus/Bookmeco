@@ -16,7 +16,7 @@ namespace Infrastructure.Persistence
         }
 
         public DbSet<Company> Companies { get; set; }
-        public DbSet<Category> Categories { get; set; }
+        public DbSet<CompanyCategory> Categories { get; set; }
         public DbSet<CompanyContent> CompanyContents { get; set; }
         public DbSet<Opinion> Opinions { get; set; }
         public DbSet<PersonData> PersonsData { get; set; }
