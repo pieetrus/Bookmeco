@@ -1,8 +1,7 @@
-﻿using Application.Companies;
+﻿using Application.DTOs;
 using AutoMapper;
 using Domain.Entities;
 using System.Linq;
-using Application.DTOs;
 
 namespace Application.Common.Mappings
 {
@@ -17,6 +16,11 @@ namespace Application.Common.Mappings
                     x => x.MapFrom(c => c.Users.Select(u => u.Id)))
                 .ForMember(x => x.Categories,
                     x => x.MapFrom(c => c.Categories.Select(ca => ca.Name)));
+
+            CreateMap<CompanyCategory, CompanyCategoryDto>();
+            CreateMap<Opinion, OpinionDto>();
+            CreateMap<Reservation, ReservationDto>();
+            CreateMap<Role, RoleDto>();
         }
     }
 }

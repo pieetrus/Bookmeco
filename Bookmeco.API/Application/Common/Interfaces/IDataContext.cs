@@ -8,7 +8,8 @@ namespace Application.Common.Interfaces
     public interface IDataContext
     {
         DbSet<Company> Companies { get; set; }
-        DbSet<CompanyCategory> Categories { get; set; }
+        DbSet<CompanyCategory> CompanyCategories { get; set; }
+        DbSet<ServiceCategory> ServiceCategories { get; set; }
         DbSet<CompanyContent> CompanyContents { get; set; }
         DbSet<Opinion> Opinions { get; set; }
         DbSet<PersonData> PersonsData { get; set; }

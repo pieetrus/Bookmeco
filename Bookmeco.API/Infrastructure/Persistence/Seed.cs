@@ -46,10 +46,10 @@ namespace Infrastructure.Persistence
                 somethingAdded = true;
             }
 
-            if (!context.Categories.Any())
+            if (!context.CompanyCategories.Any())
             {
                 var categoriesList = new List<CompanyCategory> { new CompanyCategory { Name = "Barber" }, new CompanyCategory { Name = "Manicure" } };
-                context.Categories.AddRange(categoriesList);
+                context.CompanyCategories.AddRange(categoriesList);
                 somethingAdded = true;
             }
 
