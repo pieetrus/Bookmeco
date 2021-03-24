@@ -12,7 +12,7 @@ namespace Application.Opinions.Commands.CreateOpinion
                 .NotEmpty().WithMessage("Name field is required");
 
             RuleFor(x => x.UserId)
-                .NotEmpty().WithMessage("UserId field is required");
+                .NotNull().WithMessage("UserId field is required");
 
             RuleFor(x => x.RateValue)
                 .LessThan(6).WithMessage("RateValue can be max 5")
