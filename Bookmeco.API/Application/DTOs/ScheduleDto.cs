@@ -1,12 +1,9 @@
-﻿using Domain.Common;
+﻿using Domain.Entities;
 using System.Collections.Generic;
 
-namespace Domain.Entities
+namespace Application.DTOs
 {
-    /// <summary>
-    /// Company can prepare schedules for each hired worker.
-    /// </summary>
-    public class Schedule : AuditableEntity
+    public class ScheduleDto
     {
         public int Id { get; set; }
         public int UserId { get; set; }

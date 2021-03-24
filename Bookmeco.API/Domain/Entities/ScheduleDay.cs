@@ -19,6 +19,5 @@ namespace Domain.Entities
         public DateTime? Date { get; set; }
         public bool IsRegular { get; set; }
         public int? MaxClients { get; set; }
-
     }
 }
