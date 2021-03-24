@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces;
+using Application.DTOs;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
@@ -6,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Application.DTOs;
 
 namespace Application.Companies.Queries
 {
@@ -30,7 +30,7 @@ namespace Application.Companies.Queries
         {
             var companies = await _context.Companies
                 .Include(x => x.Content)
-                .Include(x => x.Users)
+                .Include(x => x.UserCompanies)
                 .Include(x => x.Categories)
                 .ToListAsync(cancellationToken);
 

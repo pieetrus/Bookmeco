@@ -9,6 +9,7 @@ namespace Domain.Entities
     public class UserCompany : AuditableEntity
     {
         public int Id { get; set; }
+        public int UserId { get; set; }
         public User User { get; set; }
         public UserCompanyAccessType AccessType { get; set; }
     }

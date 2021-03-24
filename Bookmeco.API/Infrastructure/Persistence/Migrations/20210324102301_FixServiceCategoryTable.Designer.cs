@@ -3,14 +3,16 @@ using System;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210324102301_FixServiceCategoryTable")]
+    partial class FixServiceCategoryTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -141,13 +143,13 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int?>("RateValue")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ReservationId")
+                    b.Property<int?>("ReservationId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("SuperOpinionId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -190,7 +192,7 @@ namespace Infrastructure.Persistence.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -209,7 +211,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("PersonDataId")
+                    b.Property<int?>("PersonDataId")
                         .HasColumnType("INTEGER");
 
                     b.Property<float>("Prize")
@@ -218,10 +220,10 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("ReservationDuration")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ScheduleId")
+                    b.Property<int?>("ScheduleId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ServiceCategoryId")
+                    b.Property<int?>("ServiceCategoryId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -286,7 +288,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<DateTime?>("ModifiedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -368,6 +370,9 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("CompanyId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("TEXT");
@@ -422,6 +427,8 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CompanyId");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -441,9 +448,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int?>("AccessTypeId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("CompanyId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
@@ -456,8 +460,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AccessTypeId");
-
-                    b.HasIndex("CompanyId");
 
                     b.HasIndex("UserId");
 
@@ -657,9 +659,7 @@ namespace Infrastructure.Persistence.Migrations
                 {
                     b.HasOne("Domain.Entities.Reservation", "Reservation")
                         .WithMany("Opinions")
-                        .HasForeignKey("ReservationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ReservationId");
 
                     b.HasOne("Domain.Entities.Opinion", "SuperOpinion")
                         .WithMany()
@@ -667,9 +667,7 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasOne("Domain.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Reservation");
 
@@ -682,9 +680,7 @@ namespace Infrastructure.Persistence.Migrations
                 {
                     b.HasOne("Domain.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
@@ -693,21 +689,15 @@ namespace Infrastructure.Persistence.Migrations
                 {
                     b.HasOne("Domain.Entities.PersonData", "PersonData")
                         .WithMany()
-                        .HasForeignKey("PersonDataId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PersonDataId");
 
                     b.HasOne("Domain.Entities.Schedule", "Schedule")
                         .WithMany("Reservations")
-                        .HasForeignKey("ScheduleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ScheduleId");
 
                     b.HasOne("Domain.Entities.ServiceCategory", "ServiceCategory")
                         .WithMany("Reservations")
-                        .HasForeignKey("ServiceCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ServiceCategoryId");
 
                     b.Navigation("PersonData");
 
@@ -720,9 +710,7 @@ namespace Infrastructure.Persistence.Migrations
                 {
                     b.HasOne("Domain.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("User");
                 });
@@ -738,18 +726,21 @@ namespace Infrastructure.Persistence.Migrations
                     b.Navigation("Schedule");
                 });
 
+            modelBuilder.Entity("Domain.Entities.User", b =>
+                {
+                    b.HasOne("Domain.Entities.Company", null)
+                        .WithMany("Users")
+                        .HasForeignKey("CompanyId");
+                });
+
             modelBuilder.Entity("Domain.Entities.UserCompany", b =>
                 {
                     b.HasOne("Domain.Entities.UserCompanyAccessType", "AccessType")
                         .WithMany("UserCompanies")
                         .HasForeignKey("AccessTypeId");
 
-                    b.HasOne("Domain.Entities.Company", null)
-                        .WithMany("UserCompanies")
-                        .HasForeignKey("CompanyId");
-
                     b.HasOne("Domain.Entities.User", "User")
-                        .WithMany("UserCompanies")
+                        .WithMany()
                         .HasForeignKey("UserId");
 
                     b.Navigation("AccessType");
@@ -842,7 +833,7 @@ namespace Infrastructure.Persistence.Migrations
                 {
                     b.Navigation("Content");
 
-                    b.Navigation("UserCompanies");
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Domain.Entities.Reservation", b =>
@@ -860,11 +851,6 @@ namespace Infrastructure.Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.ServiceCategory", b =>
                 {
                     b.Navigation("Reservations");
-                });
-
-            modelBuilder.Entity("Domain.Entities.User", b =>
-                {
-                    b.Navigation("UserCompanies");
                 });
 
             modelBuilder.Entity("Domain.Entities.UserCompanyAccessType", b =>

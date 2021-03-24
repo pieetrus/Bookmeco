@@ -10,8 +10,11 @@ namespace Domain.Entities
     public class Opinion
     {
         public int Id { get; set; }
+        public int ReservationId { get; set; }
         public Reservation Reservation { get; set; }
+        public int? SuperOpinionId { get; set; }
         public Opinion SuperOpinion { get; set; }
+        public int UserId { get; set; }
         public User User { get; set; }
         public string Content { get; set; }
         public DateTime Date { get; set; }

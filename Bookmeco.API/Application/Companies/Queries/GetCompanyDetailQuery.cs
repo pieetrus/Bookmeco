@@ -1,12 +1,12 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.DTOs;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
-using Application.DTOs;
 
 namespace Application.Companies.Queries
 {
@@ -29,7 +29,7 @@ namespace Application.Companies.Queries
         {
             var entity = await _context.Companies
                 .Include(x => x.Content)
-                .Include(x => x.Users)
+                .Include(x => x.UserCompanies)
                 .Include(x => x.Categories)
                 .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
