@@ -16,6 +16,7 @@ namespace Application.Common.Mappings
                     x => x.MapFrom(c => c.Categories.Select(ca => ca.Name)));
 
             CreateMap<CompanyCategory, CompanyCategoryDto>();
+            CreateMap<UserCompany, UserCompanyDto>();
             CreateMap<Opinion, OpinionDto>();
             CreateMap<Reservation, ReservationDto>();
             CreateMap<Role, RoleDto>();
