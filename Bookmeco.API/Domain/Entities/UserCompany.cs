@@ -10,7 +10,10 @@ namespace Domain.Entities
     {
         public int Id { get; set; }
         public int UserId { get; set; }
+        public int CompanyId { get; set; }
+        public int AccessTypeId { get; set; }
         public User User { get; set; }
         public UserCompanyAccessType AccessType { get; set; }
+        public Company Company { get; set; }
     }
 }
