@@ -2,7 +2,7 @@
 using FluentValidation;
 using MediatR;
 
-namespace Application.Users.Queries
+namespace Application.Users.Queries.Login
 {
     public class LoginQuery : IRequest<UserDto>
     {

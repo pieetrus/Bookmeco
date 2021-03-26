@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Users.Queries
+namespace Application.Users.Queries.Login
 {
     public class LoginQueryHandler : IRequestHandler<LoginQuery, UserDto>
     {

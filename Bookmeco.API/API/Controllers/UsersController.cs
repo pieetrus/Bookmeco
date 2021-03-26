@@ -1,10 +1,9 @@
-﻿using Application.Users;
+﻿using Application.DTOs;
 using Application.Users.Commands.Register;
-using Application.Users.Queries;
+using Application.Users.Queries.Login;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Application.DTOs;
 
 namespace API.Controllers
 {
