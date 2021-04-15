@@ -9,7 +9,7 @@ namespace Application.DTOs
         public string Address { get; set; }
         public double Longitude { get; set; }
         public double Latitude { get; set; }
-        public string Content { get; set; }
+        public List<CompanyContentDto> Contents { get; set; }
         public List<string> Categories { get; set; }
         public List<int> UserIds { get; set; }
     }

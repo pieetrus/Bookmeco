@@ -28,8 +28,8 @@ namespace Application.Companies.Queries
         public async Task<CompanyDto> Handle(GetCompanyDetailQuery request, CancellationToken cancellationToken)
         {
             var entity = await _context.Companies
-                .Include(x => x.Content)
-                .Include(x => x.UserCompanies)
+                .Include(x => x.Contents)
+                .Include(x => x.UserCompanies).ThenInclude(x => x.User)
                 .Include(x => x.Categories)
                 .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 

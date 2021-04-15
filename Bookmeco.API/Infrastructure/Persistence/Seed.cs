@@ -58,17 +58,20 @@ namespace Infrastructure.Persistence
                 await context.SaveChangesAsync();
             }
 
-            if (!context.CompanyCategories.Any())
-            {
-                var categoriesList = new List<CompanyCategory> { new CompanyCategory { Name = "Barber" }, new CompanyCategory { Name = "Manicure" } };
-                context.CompanyCategories.AddRange(categoriesList);
-                await context.SaveChangesAsync();
-            }
-
             if (!context.Companies.Any())
             {
-                var companiesList = new List<Company> { new Company { Name = "Test company", Address = "Test address", Latitude = 12, Longitude = 14},
-                    new Company { Name = "Test company2", Address = "Test address2" } };
+                var categoriesList = new List<CompanyCategory>
+                {
+                    new CompanyCategory { Name = "Barber", },
+                    new CompanyCategory { Name = "Manicure" }
+                };
+                context.CompanyCategories.AddRange(categoriesList);
+
+                var companiesList = new List<Company>
+                {
+                    new Company { Name = "Test company", Address = "Test address", Latitude = 12, Longitude = 14, Categories = new List<CompanyCategory>{ categoriesList[0], categoriesList[1]}},
+                    new Company { Name = "Test company2", Address = "Test address2",  }
+                };
                 context.Companies.AddRange(companiesList);
                 await context.SaveChangesAsync();
             }

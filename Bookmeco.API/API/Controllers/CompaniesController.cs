@@ -3,7 +3,9 @@ using Application.Companies.Commands.DeleteCompany;
 using Application.Companies.Commands.UpdateCompany;
 using Application.Companies.Queries;
 using Application.CompaniesContent.Commands.CreateCompanyContent;
+using Application.CompaniesContent.Commands.DeleteCompanyContent;
 using Application.CompaniesContent.Commands.UpdateCompanyContent;
+using Application.CompaniesContent.Queries;
 using Application.DTOs;
 using Domain.Entities;
 using Microsoft.AspNetCore.Http;
@@ -46,13 +48,11 @@ namespace API.Controllers
         }
 
         [SwaggerOperation(Summary = "Update company")]
-        [HttpPut("{id}")]
+        [HttpPut]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateCompanyCommand command)
+        public async Task<IActionResult> Update([FromBody] UpdateCompanyCommand command)
         {
-            command.Id = id;
-
             await Mediator.Send(command);
 
             return NoContent();
@@ -69,6 +69,17 @@ namespace API.Controllers
             return NoContent();
         }
 
+        [SwaggerOperation(Summary = "Get company content detail")]
+        [HttpGet("companyContent/{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<CompanyDto>> GetCompanyContent(int id)
+        {
+            var company = await Mediator.Send(new GetCompanyContentDetailQuery { Id = id });
+
+            return Ok(company);
+        }
+
 
         [SwaggerOperation(Summary = "Add company content for company")]
         [HttpPost("{companyId}/companyContent")]
@@ -82,26 +93,25 @@ namespace API.Controllers
             return Ok(id);
         }
 
-        [SwaggerOperation(Summary = "Update company content for company")]
-        [HttpPut("{companyId}/companyContent")]
+        [SwaggerOperation(Summary = "Update company content")]
+        [HttpPut("companyContent")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> UpdateContent(int companyId, [FromBody] UpdateCompanyContentCommand command)
+        public async Task<IActionResult> UpdateContent([FromBody] UpdateCompanyContentCommand command)
         {
-            command.CompanyId = companyId;
             var id = await Mediator.Send(command);
 
             return NoContent();
         }
 
 
-        [SwaggerOperation(Summary = "Delete company content for company")]
-        [HttpDelete("{id}/companyContent")]
+        [SwaggerOperation(Summary = "Delete company content")]
+        [HttpDelete("companyContent/{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteCompanyContent(int id)
         {
-            await Mediator.Send(new DeleteCompanyCommand { Id = id });
+            await Mediator.Send(new DeleteCompanyContentCommand { Id = id });
 
             return NoContent();
         }
