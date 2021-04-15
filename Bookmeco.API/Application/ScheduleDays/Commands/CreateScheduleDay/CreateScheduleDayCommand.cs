@@ -4,6 +4,7 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,6 +12,7 @@ namespace Application.ScheduleDays.Commands.CreateScheduleDay
 {
     public class CreateScheduleDayCommand : IRequest<int>
     {
+        [JsonIgnore]
         public int ScheduleId { get; set; }
         public DateTime BeginTime { get; set; }
         public DateTime EndTime { get; set; }

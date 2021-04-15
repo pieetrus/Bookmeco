@@ -9,24 +9,24 @@ using System.Threading.Tasks;
 
 namespace Application.Schedules.Queries
 {
-    public class GetScheduleDetailListQuery : IRequest<ScheduleDto>
+    public class GetScheduleDetailQuery : IRequest<ScheduleDto>
     {
         public int Id { get; set; }
     }
 
-    public class GetScheduleDetailListQueryHandler : IRequestHandler<GetScheduleDetailListQuery, ScheduleDto>
+    public class GetScheduleDetailQueryHandler : IRequestHandler<GetScheduleDetailQuery, ScheduleDto>
     {
 
         private readonly IDataContext _context;
         private readonly IMapper _mapper;
 
-        public GetScheduleDetailListQueryHandler(IDataContext context, IMapper mapper)
+        public GetScheduleDetailQueryHandler(IDataContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
         }
 
-        public async Task<ScheduleDto> Handle(GetScheduleDetailListQuery request, CancellationToken cancellationToken)
+        public async Task<ScheduleDto> Handle(GetScheduleDetailQuery request, CancellationToken cancellationToken)
         {
             var entity = await _context.Schedules
                 .Include(x => x.Reservations)

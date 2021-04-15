@@ -4,6 +4,7 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,6 +14,7 @@ namespace Application.CompaniesContent.Commands.CreateCompanyContent
     {
         public string Name { get; set; }
         public string Content { get; set; }
+        [JsonIgnore]
         public int CompanyId { get; set; }
 
         public class Handler : IRequestHandler<CreateCompanyContentCommand, int>

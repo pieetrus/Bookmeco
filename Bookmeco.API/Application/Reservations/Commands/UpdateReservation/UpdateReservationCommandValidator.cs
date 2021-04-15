@@ -1,7 +1,11 @@
-﻿namespace Application.Reservations.Commands.UpdateReservation
+﻿using FluentValidation;
+
+namespace Application.Reservations.Commands.UpdateReservation
 {
-    public class UpdateReservationCommandValidator
+    public class UpdateReservationCommandValidator : AbstractValidator<UpdateReservationCommand>
     {
-        //todo: implement
+        public UpdateReservationCommandValidator()
+        {
+        }
     }
 }
