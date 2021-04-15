@@ -12,15 +12,12 @@ namespace Infrastructure.Persistence
     {
         public static async Task SeedData(IDataContext context, UserManager<User> userManager)
         {
-            var somethingAdded = false;
 
             if (!userManager.Users.Any())
             {
 
                 var adminRole = new Role { Name = "Admin", NormalizedName = "ADMIN" };
                 var userRole = new Role { Name = "User", NormalizedName = "USER" };
-                var serviceWorkerRole = new Role { Name = "ServiceWorker", NormalizedName = "SERVICEWORKER" };
-                var clientRole = new Role { Name = "Client", NormalizedName = "CLIENT" };
 
                 var users = new List<User>
                 {
@@ -40,7 +37,13 @@ namespace Infrastructure.Persistence
                     {
                         UserName = "serviceWorker",
                         Email = "serviceWorker@worker.com",
-                        Roles = new List<Role>{ userRole, serviceWorkerRole }
+                        Roles = new List<Role>{ userRole }
+                    },
+                    new User
+                    {
+                        UserName = "serviceOwner",
+                        Email = "serviceOwner@worker.com",
+                        Roles = new List<Role>{ userRole }
                     }
                 };
 
@@ -52,14 +55,14 @@ namespace Infrastructure.Persistence
                 }
 
 
-                somethingAdded = true;
+                await context.SaveChangesAsync();
             }
 
             if (!context.CompanyCategories.Any())
             {
                 var categoriesList = new List<CompanyCategory> { new CompanyCategory { Name = "Barber" }, new CompanyCategory { Name = "Manicure" } };
                 context.CompanyCategories.AddRange(categoriesList);
-                somethingAdded = true;
+                await context.SaveChangesAsync();
             }
 
             if (!context.Companies.Any())
@@ -67,9 +70,25 @@ namespace Infrastructure.Persistence
                 var companiesList = new List<Company> { new Company { Name = "Test company", Address = "Test address", Latitude = 12, Longitude = 14},
                     new Company { Name = "Test company2", Address = "Test address2" } };
                 context.Companies.AddRange(companiesList);
-                somethingAdded = true;
+                await context.SaveChangesAsync();
             }
 
+            if (!context.CompanyContents.Any())
+            {
+                var entitiesList = new List<CompanyContent>
+                {
+                    new CompanyContent
+                    {
+                        CompanyId = 1,
+                        Content = "Company content test",
+                        CreatedAt = DateTime.Now,
+                        Name = "Berserk"
+                    }
+                };
+
+                context.CompanyContents.AddRange(entitiesList);
+                await context.SaveChangesAsync();
+            }
 
             if (!context.ServiceCategories.Any())
             {
@@ -81,7 +100,7 @@ namespace Infrastructure.Persistence
                 };
 
                 context.ServiceCategories.AddRange(serviceCategories);
-                somethingAdded = true;
+                await context.SaveChangesAsync();
             }
 
             if (!context.Schedules.Any())
@@ -93,7 +112,7 @@ namespace Infrastructure.Persistence
                 };
 
                 context.Schedules.AddRange(entitiesList);
-                somethingAdded = true;
+                await context.SaveChangesAsync();
             }
 
             if (!context.ScheduleDays.Any())
@@ -122,7 +141,7 @@ namespace Infrastructure.Persistence
                 };
 
                 context.ScheduleDays.AddRange(entitiesList);
-                somethingAdded = true;
+                await context.SaveChangesAsync();
             }
 
             if (!context.Reservations.Any())
@@ -150,12 +169,81 @@ namespace Infrastructure.Persistence
                 };
 
                 context.Reservations.AddRange(entitiesList);
-                somethingAdded = true;
+                await context.SaveChangesAsync();
             }
 
+            if (!context.Opinions.Any())
+            {
+                var entitiesList = new List<Opinion>
+                {
+                    new Opinion
+                    {
+                        UserId = 1,
+                        Date = DateTime.Now,
+                        Content = "Good job",
+                        RateValue = 4,
+                        ReservationId = 1,
+                    },
+                    new Opinion
+                    {
+                        UserId = 2,
+                        Date = DateTime.Now,
+                        Content = "Bad job",
+                        RateValue = 1,
+                        ReservationId = 1,
+                    }
+                };
 
-            if (somethingAdded)
+                context.Opinions.AddRange(entitiesList);
                 await context.SaveChangesAsync();
+            }
+
+            if (!context.UserCompanyAccessTypes.Any())
+            {
+                var entitiesList = new List<UserCompanyAccessType>
+                {
+                    new UserCompanyAccessType
+                    {
+                        CreatedAt = DateTime.Now,
+                        AccessLevel = 5,
+                        Name = "Owner",
+                    },
+                    new UserCompanyAccessType
+                    {
+                        CreatedAt = DateTime.Now,
+                        AccessLevel = 2,
+                        Name = "Worker",
+                    }
+                };
+
+                context.UserCompanyAccessTypes.AddRange(entitiesList);
+                await context.SaveChangesAsync();
+            }
+
+            if (!context.UserCompanies.Any())
+            {
+                var entitiesList = new List<UserCompany>
+                {
+                    new UserCompany
+                    {
+                        UserId = 4,
+                        CompanyId = 1,
+                        AccessTypeId = 1,
+                        CreatedAt = DateTime.Now,
+                    },
+                    new UserCompany
+                    {
+                        UserId = 3,
+                        CompanyId = 1,
+                        AccessTypeId = 2,
+                        CreatedAt = DateTime.Now,
+                    },
+                };
+
+                context.UserCompanies.AddRange(entitiesList);
+                await context.SaveChangesAsync();
+            }
+
         }
     }
 }
