@@ -21,7 +21,6 @@ namespace Infrastructure.Persistence
         public DbSet<ServiceCategory> ServiceCategories { get; set; }
         public DbSet<CompanyContent> CompanyContents { get; set; }
         public DbSet<Opinion> Opinions { get; set; }
-        public DbSet<PersonData> PersonsData { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
         public override DbSet<Role> Roles { get; set; }
         public DbSet<Schedule> Schedules { get; set; }

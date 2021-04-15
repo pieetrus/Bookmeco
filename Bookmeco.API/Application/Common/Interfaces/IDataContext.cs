@@ -12,7 +12,6 @@ namespace Application.Common.Interfaces
         DbSet<ServiceCategory> ServiceCategories { get; set; }
         DbSet<CompanyContent> CompanyContents { get; set; }
         DbSet<Opinion> Opinions { get; set; }
-        DbSet<PersonData> PersonsData { get; set; }
         DbSet<Reservation> Reservations { get; set; }
         DbSet<Role> Roles { get; set; }
         DbSet<Schedule> Schedules { get; set; }

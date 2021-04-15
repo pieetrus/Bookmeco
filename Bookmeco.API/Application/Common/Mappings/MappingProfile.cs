@@ -20,8 +20,8 @@ namespace Application.Common.Mappings
             CreateMap<Opinion, OpinionDto>();
             CreateMap<Reservation, ReservationDto>();
             CreateMap<Role, RoleDto>();
+            CreateMap<User, UserDto>();
             CreateMap<Schedule, ScheduleDto>();
-            CreateMap<PersonData, PersonDataDto>();
         }
     }
 }

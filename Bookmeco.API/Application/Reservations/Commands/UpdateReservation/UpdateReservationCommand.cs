@@ -39,12 +39,12 @@ namespace Application.Reservations.Commands.UpdateReservation
 
                 if (request.UserId != null)
                 {
-                    var personData = await _context.PersonsData.FirstOrDefaultAsync(x => x.User.Id == request.UserId, cancellationToken);
+                    var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
 
-                    if (personData == null)
-                        throw new NotFoundException(nameof(personData), request.UserId);
+                    if (user == null)
+                        throw new NotFoundException(nameof(User), request.UserId);
 
-                    entity.PersonDataId = personData.Id;
+                    entity.UserId = user.Id;
                 }
 
                 if (request.ScheduleId != null && !await _context.Schedules.AnyAsync(x => x.Id == request.ScheduleId, cancellationToken))

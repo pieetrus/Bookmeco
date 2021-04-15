@@ -34,9 +34,9 @@ namespace Application.Reservations.Commands.CreateReservation
 
                 var entity = new Reservation();
 
-                var personData = await _context.PersonsData.FirstOrDefaultAsync(x => x.User.Id == request.UserId, cancellationToken);
+                var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
 
-                if (personData == null)
+                if (user == null)
                     throw new NotFoundException(nameof(User), request.UserId);
 
                 var schedule = await _context.Schedules.FindAsync(request.ScheduleId);
@@ -49,7 +49,7 @@ namespace Application.Reservations.Commands.CreateReservation
                 if (serviceCategory == null)
                     throw new NotFoundException(nameof(ServiceCategory), request.ServiceCategoryId);
 
-                entity.PersonData = personData;
+                entity.User = user;
                 entity.ServiceCategory = serviceCategory;
                 entity.Schedule = schedule;
                 entity.ReservationDuration = request.ReservationDuration;

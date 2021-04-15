@@ -30,7 +30,7 @@ namespace Application.Reservations.Queries
         {
             var opinions = await _context.Reservations
                 .Include(x => x.Opinions)
-                .Include(x => x.PersonData)
+                .Include(x => x.User)
                 .Include(x => x.Schedule)
                 .Include(x => x.ServiceCategory)
                 .ToListAsync(cancellationToken);

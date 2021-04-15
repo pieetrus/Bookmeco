@@ -6,6 +6,8 @@ namespace Domain.Entities
 {
     public class User : IdentityUser<int>
     {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public List<Role> Roles { get; set; }
         public List<UserCompany> UserCompanies { get; set; }
         public List<ServiceCategory> ServiceCategories { get; set; }

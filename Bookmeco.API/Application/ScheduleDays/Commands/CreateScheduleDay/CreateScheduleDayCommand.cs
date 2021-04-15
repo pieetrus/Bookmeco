@@ -14,9 +14,9 @@ namespace Application.ScheduleDays.Commands.CreateScheduleDay
     {
         [JsonIgnore]
         public int ScheduleId { get; set; }
-        public DateTime BeginTime { get; set; }
-        public DateTime EndTime { get; set; }
-        public DayOfWeek DayOfWeek { get; set; }
+        public int BeginTime { get; set; }
+        public int EndTime { get; set; }
+        public DayOfWeek? DayOfWeek { get; set; }
         public DateTime? Date { get; set; }
         public bool IsRegular { get; set; }
         public int? MaxClients { get; set; }

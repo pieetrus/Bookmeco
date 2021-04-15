@@ -1,6 +1,7 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.DTOs;
+using AutoMapper;
 using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -16,12 +17,14 @@ namespace Application.Users.Queries.Login
         private readonly IDataContext _context;
         private readonly SignInManager<User> _signInManager;
         private readonly IJwtGenerator _jwtGenerator;
+        private readonly IMapper _mapper;
 
-        public LoginQueryHandler(IDataContext context, SignInManager<User> signInManager, IJwtGenerator jwtGenerator)
+        public LoginQueryHandler(IDataContext context, SignInManager<User> signInManager, IJwtGenerator jwtGenerator, IMapper mapper)
         {
             _context = context;
             _signInManager = signInManager;
             _jwtGenerator = jwtGenerator;
+            _mapper = mapper;
         }
 
         public async Task<UserDto> Handle(LoginQuery request, CancellationToken cancellationToken)
@@ -37,12 +40,12 @@ namespace Application.Users.Queries.Login
 
             if (result.Succeeded)
             {
-                return new UserDto
-                {
-                    Username = user.UserName,
-                    Token = _jwtGenerator.CreateToken(user),
-                    Roles = user.Roles.Select(r => r.Name).ToList()
-                };
+
+                var userDto = _mapper.Map<User, UserDto>(user);
+                userDto.Roles = user.Roles.Select(r => r.Name).ToList();
+                userDto.Token = _jwtGenerator.CreateToken(user);
+
+                return userDto;
             }
 
             throw new UnauthorizedException(request.UserName);

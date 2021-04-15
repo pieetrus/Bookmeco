@@ -1,5 +1,6 @@
 ﻿using Application.DTOs;
 using Application.Users.Commands.Register;
+using Application.Users.Commands.UpdateUser;
 using Application.Users.Queries.Login;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,6 +26,18 @@ namespace API.Controllers
         {
             return await Mediator.Send(command);
         }
+
+
+        [SwaggerOperation(Summary = "Assign user (worker) to service categories.")]
+        [HttpPut("{userId}")]
+        public async Task<IActionResult> AssignUserToServiceCategories(int userId, UpdateUserCommand command)
+        {
+            command.UserId = userId;
+            await Mediator.Send(command);
+
+            return NoContent();
+        }
+
 
         //[HttpGet]
         //public async Task<ActionResult<User>> CurrentUser()
