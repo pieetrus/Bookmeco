@@ -1,5 +1,7 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.DTOs;
+using AutoMapper;
 using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -13,27 +15,29 @@ using System.Threading.Tasks;
 
 namespace Application.Users.Commands.UpdateUser
 {
-    public class UpdateUserCommand : IRequest
+    public class UpdateUserCommand : IRequest<UserDto>
     {
         [JsonIgnore]
         public int UserId { get; set; }
-        public List<int> ServiceCategoryIds { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string PhoneNumber { get; set; }
+        public List<int> ServiceCategoryIds { get; set; }
 
-        public class Handler : IRequestHandler<UpdateUserCommand>
+        public class Handler : IRequestHandler<UpdateUserCommand, UserDto>
         {
             private readonly IDataContext _context;
+            private readonly IMapper _mapper;
 
-            public Handler(IDataContext context, UserManager<User> userManager, IJwtGenerator jwtGenerator)
+            public Handler(IDataContext context, UserManager<User> userManager, IJwtGenerator jwtGenerator, IMapper mapper = null)
             {
                 _context = context;
+                _mapper = mapper;
             }
 
-            public async Task<Unit> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
+            public async Task<UserDto> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
             {
                 List<ServiceCategory> serviceCategoriesDb = null;
 
@@ -64,7 +68,7 @@ namespace Application.Users.Commands.UpdateUser
 
                 var success = await _context.SaveChangesAsync(cancellationToken) > 0;
 
-                if (success) return Unit.Value;
+                if (success) return _mapper.Map<User, UserDto>(user);
 
                 throw new Exception("Problem saving changes");
             }

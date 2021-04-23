@@ -5,6 +5,7 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,11 +13,11 @@ namespace Application.Opinions.Queries
 {
     public class GetOpinionsListQuery : IRequest<IEnumerable<OpinionDto>>
     {
+        public int? ReservationId { get; set; }
     }
 
     public class GetCompanyCategoriesListQueryHandler : IRequestHandler<GetOpinionsListQuery, IEnumerable<OpinionDto>>
     {
-
         private readonly IDataContext _context;
         private readonly IMapper _mapper;
 
@@ -28,10 +29,15 @@ namespace Application.Opinions.Queries
 
         public async Task<IEnumerable<OpinionDto>> Handle(GetOpinionsListQuery request, CancellationToken cancellationToken)
         {
-            var opinions = await _context.Opinions
+            var queryable = _context.Opinions.AsQueryable();
+
+            if (request.ReservationId != null)
+            {
+                queryable = queryable.Where(x => x.ReservationId == request.ReservationId);
+            }
+
+            var opinions = await queryable
                 .Include(x => x.User)
-                .Include(x => x.Reservation)
-                .Include(x => x.SuperOpinion)
                 .ToListAsync(cancellationToken);
 
             return _mapper.Map<IEnumerable<Opinion>, IEnumerable<OpinionDto>>(opinions);

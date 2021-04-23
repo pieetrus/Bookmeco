@@ -1,4 +1,6 @@
 ﻿using Application.Common.Interfaces;
+using Application.DTOs;
+using AutoMapper;
 using Domain.Entities;
 using MediatR;
 using System;
@@ -7,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Application.Companies.Commands.CreateCompany
 {
-    public class CreateCompanyCommand : IRequest<int>
+    public class CreateCompanyCommand : IRequest<CompanyDto>
     {
         public string Name { get; set; }
         public string Address { get; set; }
@@ -15,16 +17,18 @@ namespace Application.Companies.Commands.CreateCompany
         public double Longitude { get; set; }
 
 
-        public class Handler : IRequestHandler<CreateCompanyCommand, int>
+        public class Handler : IRequestHandler<CreateCompanyCommand, CompanyDto>
         {
             private readonly IDataContext _context;
+            private readonly IMapper _mapper;
 
-            public Handler(IDataContext context)
+            public Handler(IDataContext context, IMapper mapper)
             {
                 _context = context;
+                _mapper = mapper;
             }
 
-            public async Task<int> Handle(CreateCompanyCommand request, CancellationToken cancellationToken)
+            public async Task<CompanyDto> Handle(CreateCompanyCommand request, CancellationToken cancellationToken)
             {
                 var entity = new Company
                 {
@@ -38,7 +42,7 @@ namespace Application.Companies.Commands.CreateCompany
 
                 var success = await _context.SaveChangesAsync(cancellationToken) > 0;
 
-                if (success) return entity.Id;
+                if (success) return _mapper.Map<Company, CompanyDto>(entity);
 
                 throw new Exception("Problem saving changes");
             }

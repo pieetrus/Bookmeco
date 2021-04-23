@@ -35,24 +35,22 @@ namespace API.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> Create([FromBody] CreateRoleCommand command)
+        public async Task<ActionResult<RoleDto>> Create([FromBody] CreateRoleCommand command)
         {
-            var id = await Mediator.Send(command);
+            var role = await Mediator.Send(command);
 
-            return Ok(id);
+            return Ok(role);
         }
 
         [SwaggerOperation(Summary = "Update role")]
-        [HttpPut("{id}")]
+        [HttpPut]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateRoleCommand command)
+        public async Task<ActionResult<RoleDto>> Update([FromBody] UpdateRoleCommand command)
         {
-            command.Id = id;
+            var role = await Mediator.Send(command);
 
-            await Mediator.Send(command);
-
-            return NoContent();
+            return Ok(role);
         }
 
         [SwaggerOperation(Summary = "Delete role")]

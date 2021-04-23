@@ -1,36 +1,41 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.DTOs;
+using AutoMapper;
 using Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Application.Opinions.Commands.UpdateOpinion
 {
-    public class UpdateOpinionCommand : IRequest
+    public class UpdateOpinionCommand : IRequest<OpinionDto>
     {
         public int Id { get; set; }
-        public int? UserId { get; set; }
+        public int UserId { get; set; }
         public string Content { get; set; }
         public int? RateValue { get; set; }
-        public int? ReservationId { get; set; }
+        public int ReservationId { get; set; }
         public int? SuperOpinionId { get; set; }
 
-
-        public class Handler : IRequestHandler<UpdateOpinionCommand>
+        public class Handler : IRequestHandler<UpdateOpinionCommand, OpinionDto>
         {
             private readonly IDataContext _context;
+            private readonly IMapper _mapper;
 
-            public Handler(IDataContext context)
+            public Handler(IDataContext context, IMapper mapper)
             {
                 _context = context;
+                _mapper = mapper;
             }
 
-
-            public async Task<Unit> Handle(UpdateOpinionCommand request, CancellationToken cancellationToken)
+            public async Task<OpinionDto> Handle(UpdateOpinionCommand request, CancellationToken cancellationToken)
             {
-                var entity = await _context.Opinions.FindAsync(request.Id);
+                var entity = await _context.Opinions
+                    .Include(x => x.User).ThenInclude(x => x.Roles)
+                    .FirstOrDefaultAsync(x => x.Id == request.Id);
 
                 if (entity == null)
                 {
@@ -41,7 +46,7 @@ namespace Application.Opinions.Commands.UpdateOpinion
                 entity.User = null;
                 entity.SuperOpinion = null;
 
-                if (request.ReservationId != null)
+                if (request.ReservationId != entity.ReservationId)
                 {
                     var reservation = await _context.Reservations.FindAsync(request.ReservationId);
 
@@ -51,9 +56,11 @@ namespace Application.Opinions.Commands.UpdateOpinion
                     entity.Reservation = reservation;
                 }
 
-                if (request.UserId != null)
+                if (request.UserId != entity.UserId)
                 {
-                    var user = await _context.Users.FindAsync(request.UserId);
+                    var user = await _context.Users
+                        .Include(x => x.Roles)
+                        .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
 
                     if (user == null)
                         throw new NotFoundException(nameof(User), request.UserId);
@@ -61,7 +68,8 @@ namespace Application.Opinions.Commands.UpdateOpinion
                     entity.User = user;
                 }
 
-                if (request.SuperOpinionId != null)
+                if (request.SuperOpinionId != entity.SuperOpinionId &&
+                    request.SuperOpinionId != null)
                 {
                     var opinion = await _context.Opinions.FindAsync(request.UserId);
 
@@ -71,12 +79,13 @@ namespace Application.Opinions.Commands.UpdateOpinion
                     entity.SuperOpinion = opinion;
                 }
 
-                entity.Content = request.Content ?? entity.Content;
-                entity.RateValue = request.RateValue ?? entity.RateValue; //todo: what if we want to remove rate value and set to null 
+                entity.Content = request.Content;
+                entity.RateValue = request.RateValue;
+                entity.Date = DateTime.Now;
 
                 var success = await _context.SaveChangesAsync(cancellationToken) > 0;
 
-                if (success) return Unit.Value;
+                if (success) return _mapper.Map<Opinion, OpinionDto>(entity);
 
                 throw new Exception("Problem saving changes");
             }

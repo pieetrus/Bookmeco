@@ -2,6 +2,7 @@
 using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,12 +25,16 @@ namespace Application.Opinions.Commands.DeleteOpinion
 
         public async Task<Unit> Handle(DeleteOpinionCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _context.Opinions.FindAsync(request.Id, cancellationToken);
+            var entity = await _context.Opinions
+                .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
             if (entity == null)
             {
                 throw new NotFoundException(nameof(Opinion), request.Id);
             }
+
+            if (await _context.Opinions.AnyAsync(x => x.SuperOpinionId == entity.Id))
+                throw new ExistsRelatedObjectsException(nameof(Opinion), request.Id);
 
             _context.Opinions.Remove(entity);
 

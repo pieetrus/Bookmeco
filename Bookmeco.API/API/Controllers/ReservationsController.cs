@@ -35,24 +35,22 @@ namespace API.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> Create([FromBody] CreateReservationCommand command)
+        public async Task<ActionResult<ReservationDto>> Create([FromBody] CreateReservationCommand command)
         {
-            var id = await Mediator.Send(command);
+            var reservation = await Mediator.Send(command);
 
-            return Ok(id);
+            return Ok(reservation);
         }
 
         [SwaggerOperation(Summary = "Update reservation")]
-        [HttpPut("{id}")]
+        [HttpPut]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateReservationCommand command)
+        public async Task<ActionResult<ReservationDto>> Update([FromBody] UpdateReservationCommand command)
         {
-            command.Id = id;
+            var reservation = await Mediator.Send(command);
 
-            await Mediator.Send(command);
-
-            return NoContent();
+            return Ok(reservation);
         }
 
         [SwaggerOperation(Summary = "Delete reservation")]

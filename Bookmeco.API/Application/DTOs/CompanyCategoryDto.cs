@@ -1,5 +1,4 @@
-﻿using Domain.Entities;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Application.DTOs
 {
@@ -7,7 +6,7 @@ namespace Application.DTOs
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public CompanyCategory SuperCompanyCategory { get; set; }
-        public List<CompanyDto> Companies { get; set; }
+        public int? SuperCompanyCategoryId { get; set; }
+        public List<int> CompanyIds { get; set; }
     }
 }

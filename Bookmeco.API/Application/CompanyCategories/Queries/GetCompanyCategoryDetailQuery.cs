@@ -30,7 +30,8 @@ namespace Application.CompanyCategories.Queries
         public async Task<CompanyCategoryDto> Handle(GetCompanyCategoryDetailQuery request, CancellationToken cancellationToken)
         {
             var entity = await _context.CompanyCategories
-                .Include(x => x.Companies)
+                .Include(x => x.Companies).ThenInclude(x => x.UserCompanies).ThenInclude(x => x.User)
+                .Include(x => x.Companies).ThenInclude(x => x.Contents)
                 .Include(x => x.SuperCompanyCategory)
                 .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 

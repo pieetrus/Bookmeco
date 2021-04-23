@@ -40,22 +40,22 @@ namespace API.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> Create([FromBody] CreateCompanyCommand command)
+        public async Task<ActionResult<CompanyDto>> Create([FromBody] CreateCompanyCommand command)
         {
-            var id = await Mediator.Send(command);
+            var company = await Mediator.Send(command);
 
-            return Ok(id);
+            return Ok(company);
         }
 
         [SwaggerOperation(Summary = "Update company")]
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Update([FromBody] UpdateCompanyCommand command)
+        public async Task<ActionResult<CompanyDto>> Update([FromBody] UpdateCompanyCommand command)
         {
-            await Mediator.Send(command);
+            var company = await Mediator.Send(command);
 
-            return NoContent();
+            return Ok(company);
         }
 
         [SwaggerOperation(Summary = "Delete company")]
@@ -73,7 +73,7 @@ namespace API.Controllers
         [HttpGet("companyContent/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<CompanyDto>> GetCompanyContent(int id)
+        public async Task<ActionResult<CompanyContentDto>> GetCompanyContent(int id)
         {
             var company = await Mediator.Send(new GetCompanyContentDetailQuery { Id = id });
 
@@ -85,23 +85,23 @@ namespace API.Controllers
         [HttpPost("{companyId}/companyContent")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> CreateContent(int companyId, [FromBody] CreateCompanyContentCommand command)
+        public async Task<ActionResult<CompanyContentDto>> CreateContent(int companyId, [FromBody] CreateCompanyContentCommand command)
         {
             command.CompanyId = companyId;
-            var id = await Mediator.Send(command);
+            var companyContent = await Mediator.Send(command);
 
-            return Ok(id);
+            return Ok(companyContent);
         }
 
         [SwaggerOperation(Summary = "Update company content")]
         [HttpPut("companyContent")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> UpdateContent([FromBody] UpdateCompanyContentCommand command)
+        public async Task<ActionResult<CompanyContentDto>> UpdateContent([FromBody] UpdateCompanyContentCommand command)
         {
-            var id = await Mediator.Send(command);
+            var companyContent = await Mediator.Send(command);
 
-            return NoContent();
+            return Ok(companyContent);
         }
 
 

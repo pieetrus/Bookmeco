@@ -2,6 +2,7 @@
 using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,11 +25,19 @@ namespace Application.CompanyCategories.Commands.DeleteCompanyCategory
 
         public async Task<Unit> Handle(DeleteCompanyCategoryCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _context.CompanyCategories.FindAsync(request.Id, cancellationToken);
+            var entity = await _context.CompanyCategories
+                .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken );
 
             if (entity == null)
             {
                 throw new NotFoundException(nameof(CompanyCategory), request.Id);
+            }
+
+            var haveRelatedObjects = await _context.CompanyCategories.AnyAsync(x => x.SuperCompanyCategoryId == request.Id);
+
+            if (haveRelatedObjects)
+            {
+                throw new ExistsRelatedObjectsException(nameof(CompanyCategory), request.Id);
             }
 
             _context.CompanyCategories.Remove(entity);

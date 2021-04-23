@@ -35,7 +35,7 @@ namespace API.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> Create([FromBody] CreateUserCompanyCommand command)
+        public async Task<ActionResult<UserCompanyDto>> Create([FromBody] CreateUserCompanyCommand command)
         {
             var id = await Mediator.Send(command);
 
@@ -43,16 +43,14 @@ namespace API.Controllers
         }
 
         [SwaggerOperation(Summary = "Update user company")]
-        [HttpPut("{id}")]
+        [HttpPut]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateUserCompanyCommand command)
+        public async Task<ActionResult<UserCompanyDto>> Update([FromBody] UpdateUserCompanyCommand command)
         {
-            command.Id = id;
+            var companyCategory = await Mediator.Send(command);
 
-            await Mediator.Send(command);
-
-            return NoContent();
+            return Ok(companyCategory);
         }
 
         [SwaggerOperation(Summary = "Delete user company")]

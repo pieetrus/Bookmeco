@@ -1,7 +1,10 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.DTOs;
+using AutoMapper;
 using Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Text.Json.Serialization;
 using System.Threading;
@@ -9,24 +12,24 @@ using System.Threading.Tasks;
 
 namespace Application.Schedules.Commands.UpdateSchedule
 {
-    public class UpdateScheduleCommand : IRequest
+    public class UpdateScheduleCommand : IRequest<ScheduleDto>
     {
-        [JsonIgnore]
         public int Id { get; set; }
-        public int? UserId { get; set; }
-        public bool? IsAvailable { get; set; }
+        public int UserId { get; set; }
+        public bool IsAvailable { get; set; }
 
-        public class Handler : IRequestHandler<UpdateScheduleCommand>
+        public class Handler : IRequestHandler<UpdateScheduleCommand, ScheduleDto>
         {
             private readonly IDataContext _context;
+            private readonly IMapper _mapper;
 
-            public Handler(IDataContext context)
+            public Handler(IDataContext context, IMapper mapper)
             {
                 _context = context;
+                _mapper = mapper;
             }
 
-
-            public async Task<Unit> Handle(UpdateScheduleCommand request, CancellationToken cancellationToken)
+            public async Task<ScheduleDto> Handle(UpdateScheduleCommand request, CancellationToken cancellationToken)
             {
                 var entity = await _context.Schedules.FindAsync(request.Id);
 
@@ -35,12 +38,18 @@ namespace Application.Schedules.Commands.UpdateSchedule
                     throw new NotFoundException(nameof(Schedule), request.Id);
                 }
 
-                entity.UserId = request.UserId ?? entity.UserId;
-                entity.IsAvailable = request.IsAvailable ?? entity.IsAvailable;
+                if (request.UserId != entity.UserId &&
+                    !await _context.Users.AnyAsync(x => x.Id == request.UserId))
+                {
+                    throw new NotFoundException(nameof(User), request.UserId);
+                }
+
+                entity.UserId = request.UserId;
+                entity.IsAvailable = request.IsAvailable;
 
                 var success = await _context.SaveChangesAsync(cancellationToken) > 0;
 
-                if (success) return Unit.Value;
+                if (success) return _mapper.Map<Schedule, ScheduleDto>(entity);
 
                 throw new Exception("Problem saving changes");
             }

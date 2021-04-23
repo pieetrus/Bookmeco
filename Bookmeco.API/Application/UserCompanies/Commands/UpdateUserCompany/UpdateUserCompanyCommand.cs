@@ -1,5 +1,7 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.DTOs;
+using AutoMapper;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -9,24 +11,26 @@ using System.Threading.Tasks;
 
 namespace Application.UserCompanies.Commands.UpdateUserCompany
 {
-    public class UpdateUserCompanyCommand : IRequest
+    public class UpdateUserCompanyCommand : IRequest<UserCompanyDto>
     {
         public int Id { get; set; }
         public int? UserId { get; set; }
         public int? CompanyId { get; set; }
         public int? AccessTypeId { get; set; }
 
-        public class Handler : IRequestHandler<UpdateUserCompanyCommand>
+        public class Handler : IRequestHandler<UpdateUserCompanyCommand, UserCompanyDto>
         {
             private readonly IDataContext _context;
+            private readonly IMapper _mapper;
 
-            public Handler(IDataContext context)
+            public Handler(IDataContext context, IMapper mapper)
             {
                 _context = context;
+                _mapper = mapper;
             }
 
 
-            public async Task<Unit> Handle(UpdateUserCompanyCommand request, CancellationToken cancellationToken)
+            public async Task<UserCompanyDto> Handle(UpdateUserCompanyCommand request, CancellationToken cancellationToken)
             {
                 var entity = await _context.UserCompanies.FindAsync(request.Id);
 
@@ -48,7 +52,7 @@ namespace Application.UserCompanies.Commands.UpdateUserCompany
 
                 var success = await _context.SaveChangesAsync(cancellationToken) > 0;
 
-                if (success) return Unit.Value;
+                if (success) return _mapper.Map<UserCompany, UserCompanyDto>(entity);
 
                 throw new Exception("Problem saving changes");
             }

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Application.Users.Queries.Login
 {
-    public class LoginQueryHandler : IRequestHandler<LoginQuery, UserDto>
+    public class LoginQueryHandler : IRequestHandler<LoginQuery, UserLoginDto>
     {
         private readonly IDataContext _context;
         private readonly SignInManager<User> _signInManager;
@@ -27,7 +27,7 @@ namespace Application.Users.Queries.Login
             _mapper = mapper;
         }
 
-        public async Task<UserDto> Handle(LoginQuery request, CancellationToken cancellationToken)
+        public async Task<UserLoginDto> Handle(LoginQuery request, CancellationToken cancellationToken)
         {
             var user = await _context.Users
                 .Include(x => x.Roles)
@@ -40,8 +40,7 @@ namespace Application.Users.Queries.Login
 
             if (result.Succeeded)
             {
-
-                var userDto = _mapper.Map<User, UserDto>(user);
+                var userDto = _mapper.Map<User, UserLoginDto>(user);
                 userDto.Roles = user.Roles.Select(r => r.Name).ToList();
                 userDto.Token = _jwtGenerator.CreateToken(user);
 

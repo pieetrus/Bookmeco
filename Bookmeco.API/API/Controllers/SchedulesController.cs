@@ -19,7 +19,7 @@ namespace API.Controllers
     {
         [SwaggerOperation(Summary = "Get schedules list")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RoleDto>>> GetAllSchedules()
+        public async Task<ActionResult<IEnumerable<ScheduleDto>>> GetAllSchedules()
         {
             return Ok(await Mediator.Send(new GetSchedulesListQuery()));
         }
@@ -28,7 +28,7 @@ namespace API.Controllers
         [HttpGet("{scheduleId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<RoleDto>> GetSchedule(int scheduleId)
+        public async Task<ActionResult<ScheduleDto>> GetSchedule(int scheduleId)
         {
             var company = await Mediator.Send(new GetScheduleDetailQuery { Id = scheduleId });
 
@@ -39,24 +39,22 @@ namespace API.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> CreateSchedule([FromBody] CreateScheduleCommand command)
+        public async Task<ActionResult<ScheduleDto>> CreateSchedule([FromBody] CreateScheduleCommand command)
         {
-            var id = await Mediator.Send(command);
+            var schedule = await Mediator.Send(command);
 
-            return Ok(id);
+            return Ok(schedule);
         }
 
         [SwaggerOperation(Summary = "Update schedule")]
-        [HttpPut("{scheduleId}")]
+        [HttpPut]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateSchedule(int scheduleId, [FromBody] UpdateScheduleCommand command)
+        public async Task<ActionResult<ScheduleDto>> UpdateSchedule([FromBody] UpdateScheduleCommand command)
         {
-            command.Id = scheduleId;
+            var schedule = await Mediator.Send(command);
 
-            await Mediator.Send(command);
-
-            return NoContent();
+            return Ok(schedule);
         }
 
         [SwaggerOperation(Summary = "Delete schedule")]
@@ -92,13 +90,13 @@ namespace API.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> CreateScheduleDay(int scheduleId, [FromBody] CreateScheduleDayCommand command)
+        public async Task<ActionResult<ScheduleDayDto>> CreateScheduleDay(int scheduleId, [FromBody] CreateScheduleDayCommand command)
         {
             command.ScheduleId = scheduleId;
 
-            var id = await Mediator.Send(command);
+            var scheduleDay = await Mediator.Send(command);
 
-            return Ok(id);
+            return Ok(scheduleDay);
         }
 
         [SwaggerOperation(Summary = "Update day in schedule")]
@@ -106,11 +104,11 @@ namespace API.Controllers
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateScheduleDay([FromBody] UpdateScheduleDayCommand command)
+        public async Task<ActionResult<ScheduleDayDto>> UpdateScheduleDay([FromBody] UpdateScheduleDayCommand command)
         {
-            await Mediator.Send(command);
+            var scheduleDay = await Mediator.Send(command);
 
-            return NoContent();
+            return Ok(scheduleDay);
         }
 
         [SwaggerOperation(Summary = "Delete schedule day")]

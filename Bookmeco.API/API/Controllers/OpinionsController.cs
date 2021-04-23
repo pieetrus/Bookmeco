@@ -14,10 +14,13 @@ namespace API.Controllers
     public class OpinionsController : BaseController
     {
         [SwaggerOperation(Summary = "Get opinions list")]
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<OpinionDto>>> GetAll()
+        [HttpGet()]
+        public async Task<ActionResult<IEnumerable<OpinionDto>>> GetAll([FromQuery] int? reservationId)
         {
-            return Ok(await Mediator.Send(new GetOpinionsListQuery()));
+            var query = new GetOpinionsListQuery();
+            query.ReservationId = reservationId;
+
+            return Ok(await Mediator.Send(query));
         }
 
         [SwaggerOperation(Summary = "Get opinion details")]
@@ -35,24 +38,22 @@ namespace API.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> Create([FromBody] CreateOpinionCommand command)
+        public async Task<ActionResult<OpinionDto>> Create([FromBody] CreateOpinionCommand command)
         {
-            var id = await Mediator.Send(command);
+            var opinion = await Mediator.Send(command);
 
-            return Ok(id);
+            return Ok(opinion);
         }
 
         [SwaggerOperation(Summary = "Update opinion")]
-        [HttpPut("{id}")]
+        [HttpPut]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateOpinionCommand command)
+        public async Task<ActionResult<OpinionDto>> Update([FromBody] UpdateOpinionCommand command)
         {
-            command.Id = id;
+            var opinion = await Mediator.Send(command);
 
-            await Mediator.Send(command);
-
-            return NoContent();
+            return Ok(opinion);
         }
 
         [SwaggerOperation(Summary = "Delete opinion")]

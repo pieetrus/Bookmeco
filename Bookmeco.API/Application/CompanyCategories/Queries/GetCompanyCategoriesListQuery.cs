@@ -29,7 +29,8 @@ namespace Application.CompanyCategories.Queries
         public async Task<IEnumerable<CompanyCategoryDto>> Handle(GetCompanyCategoriesListQuery request, CancellationToken cancellationToken)
         {
             var companies = await _context.CompanyCategories
-                .Include(x => x.Companies)
+                .Include(x => x.Companies).ThenInclude(x => x.UserCompanies).ThenInclude(x => x.User)
+                .Include(x => x.Companies).ThenInclude(x => x.Contents)
                 .Include(x => x.SuperCompanyCategory)
                 .ToListAsync(cancellationToken);
 

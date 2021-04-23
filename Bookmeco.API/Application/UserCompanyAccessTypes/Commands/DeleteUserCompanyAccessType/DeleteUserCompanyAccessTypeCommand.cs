@@ -2,6 +2,7 @@
 using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,7 +26,8 @@ namespace Application.UserCompanyAccessTypes.Commands.DeleteUserCompanyAccessTyp
 
         public async Task<Unit> Handle(DeleteUserCompanyAccessTypeCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _context.UserCompanyAccessTypes.FindAsync(request.Id, cancellationToken);
+            var entity = await _context.UserCompanyAccessTypes
+                .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
             if (entity == null)
             {

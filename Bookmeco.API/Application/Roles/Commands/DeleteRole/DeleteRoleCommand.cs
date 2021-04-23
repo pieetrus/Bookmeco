@@ -2,7 +2,9 @@
 using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -24,11 +26,18 @@ namespace Application.Roles.Commands.DeleteRole
 
         public async Task<Unit> Handle(DeleteRoleCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _context.Roles.FindAsync(request.Id, cancellationToken);
+            var entity = await _context.Roles
+                .Include(x => x.Users)
+                .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
             if (entity == null)
             {
                 throw new NotFoundException(nameof(Role), request.Id);
+            }
+
+            if (entity.Users.Any())
+            {
+                throw new ExistsRelatedObjectsException(nameof(Role), request.Id);
             }
 
             _context.Roles.Remove(entity);

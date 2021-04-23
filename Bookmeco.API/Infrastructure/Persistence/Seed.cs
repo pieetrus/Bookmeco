@@ -17,7 +17,9 @@ namespace Infrastructure.Persistence
             {
 
                 var adminRole = new Role { Name = "Admin", NormalizedName = "ADMIN" };
-                var userRole = new Role { Name = "User", NormalizedName = "USER" };
+                var userRole = new Role { Name = "Client", NormalizedName = "CLIENT" };
+                var serviceProviderRole = new Role { Name = "Service Provider", NormalizedName = "SERVICE PROVIDER" };
+                var serviceWorkerRole = new Role { Name = "Service Worker", NormalizedName = "SERVICE WORKER" };
 
                 var users = new List<User>
                 {
@@ -63,7 +65,7 @@ namespace Infrastructure.Persistence
                 var categoriesList = new List<CompanyCategory>
                 {
                     new CompanyCategory { Name = "Barber", },
-                    new CompanyCategory { Name = "Manicure" }
+                    new CompanyCategory { Name = "Manicure" },
                 };
                 context.CompanyCategories.AddRange(categoriesList);
 
@@ -103,6 +105,11 @@ namespace Infrastructure.Persistence
                 };
 
                 context.ServiceCategories.AddRange(serviceCategories);
+                await context.SaveChangesAsync();
+
+                var users = context.Users.ToList();
+                users[0].ServiceCategories = new List<ServiceCategory> { serviceCategories[0] };
+                users[1].ServiceCategories = new List<ServiceCategory> { serviceCategories[0], serviceCategories[1] };
                 await context.SaveChangesAsync();
             }
 

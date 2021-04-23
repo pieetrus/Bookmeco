@@ -1,5 +1,6 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.DTOs;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
@@ -8,11 +9,10 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using UserDto = Application.DTOs.UserDto;
 
 namespace Application.Users.Commands.Register
 {
-    public class RegisterCommand : IRequest<UserDto>
+    public class RegisterCommand : IRequest<UserLoginDto>
     {
 
         public string Username { get; set; }
@@ -22,7 +22,7 @@ namespace Application.Users.Commands.Register
         public string LastName { get; set; }
         public string PhoneNumber { get; set; }
 
-        public class Handler : IRequestHandler<RegisterCommand, UserDto>
+        public class Handler : IRequestHandler<RegisterCommand, UserLoginDto>
         {
             private readonly IDataContext _context;
             private readonly UserManager<User> _userManager;
@@ -37,7 +37,7 @@ namespace Application.Users.Commands.Register
                 _mapper = mapper;
             }
 
-            public async Task<UserDto> Handle(RegisterCommand request, CancellationToken cancellationToken)
+            public async Task<UserLoginDto> Handle(RegisterCommand request, CancellationToken cancellationToken)
             {
                 if (await _context.Users.AnyAsync(x => x.Email == request.Email, cancellationToken))
                     throw new BadRequestException("Email already exist");
@@ -60,7 +60,7 @@ namespace Application.Users.Commands.Register
 
                 if (result.Succeeded)
                 {
-                    var userDto = _mapper.Map<User, UserDto>(user);
+                    var userDto = _mapper.Map<User, UserLoginDto>(user);
                     userDto.Token = _jwtGenerator.CreateToken(user);
 
                     return userDto;

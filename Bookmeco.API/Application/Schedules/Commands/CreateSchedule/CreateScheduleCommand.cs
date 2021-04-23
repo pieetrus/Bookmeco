@@ -1,4 +1,6 @@
 ﻿using Application.Common.Interfaces;
+using Application.DTOs;
+using AutoMapper;
 using Domain.Entities;
 using MediatR;
 using System;
@@ -8,23 +10,24 @@ using System.Threading.Tasks;
 namespace Application.Schedules.Commands.CreateSchedule
 {
 
-    public class CreateScheduleCommand : IRequest<int>
+    public class CreateScheduleCommand : IRequest<ScheduleDto>
     {
         public int UserId { get; set; }
         public bool IsAvailable { get; set; }
 
-        public class Handler : IRequestHandler<CreateScheduleCommand, int>
+        public class Handler : IRequestHandler<CreateScheduleCommand, ScheduleDto>
         {
             private readonly IDataContext _context;
+            private readonly IMapper _mapper;
 
-            public Handler(IDataContext context)
+            public Handler(IDataContext context, IMapper mapper)
             {
                 _context = context;
+                _mapper = mapper;
             }
 
-            public async Task<int> Handle(CreateScheduleCommand request, CancellationToken cancellationToken)
+            public async Task<ScheduleDto> Handle(CreateScheduleCommand request, CancellationToken cancellationToken)
             {
-
                 var entity = new Schedule
                 {
                     UserId = request.UserId,
@@ -35,7 +38,7 @@ namespace Application.Schedules.Commands.CreateSchedule
 
                 var success = await _context.SaveChangesAsync(cancellationToken) > 0;
 
-                if (success) return entity.Id;
+                if (success) return _mapper.Map<Schedule, ScheduleDto>(entity);
 
                 throw new Exception("Problem saving changes");
             }

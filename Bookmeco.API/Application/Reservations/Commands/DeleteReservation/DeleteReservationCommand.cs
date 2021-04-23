@@ -2,6 +2,7 @@
 using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,7 +26,8 @@ namespace Application.Reservations.Commands.DeleteReservation
 
         public async Task<Unit> Handle(DeleteReservationCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _context.Reservations.FindAsync(request.Id, cancellationToken);
+            var entity = await _context.Reservations
+                .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
             if (entity == null)
             {

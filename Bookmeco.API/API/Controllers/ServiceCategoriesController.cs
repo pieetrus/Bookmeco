@@ -35,21 +35,19 @@ namespace API.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> Create([FromBody] CreateServiceCategoryCommand command)
+        public async Task<ActionResult<ServiceCategoryDto>> Create([FromBody] CreateServiceCategoryCommand command)
         {
-            var id = await Mediator.Send(command);
+            var serviceCategory = await Mediator.Send(command);
 
-            return Ok(id);
+            return Ok(serviceCategory);
         }
 
         [SwaggerOperation(Summary = "Update service category")]
-        [HttpPut("{id}")]
+        [HttpPut]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateServiceCategoryCommand command)
+        public async Task<ActionResult<ServiceCategoryDto>> Update([FromBody] UpdateServiceCategoryCommand command)
         {
-            command.Id = id;
-
             await Mediator.Send(command);
 
             return NoContent();

@@ -8,8 +8,6 @@ namespace Application.Reservations.Commands.CreateReservation
         {
             RuleFor(x => x.ServiceCategoryId).NotNull();
             RuleFor(x => x.UserId).NotNull();
-            RuleFor(x => x.ReservationDuration).NotNull();
-            RuleFor(x => x.Prize).NotNull();
         }
     }
 }

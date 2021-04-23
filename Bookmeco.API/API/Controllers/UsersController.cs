@@ -1,10 +1,12 @@
 ﻿using Application.DTOs;
 using Application.Users.Commands.Register;
 using Application.Users.Commands.UpdateUser;
+using Application.Users.Queries;
 using Application.Users.Queries.Login;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -14,7 +16,7 @@ namespace API.Controllers
         [SwaggerOperation(Summary = "Endpoint for login. Returns token.")]
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<ActionResult<UserDto>> Login(LoginQuery query)
+        public async Task<ActionResult<UserLoginDto>> Login(LoginQuery query)
         {
             return await Mediator.Send(query);
         }
@@ -22,15 +24,15 @@ namespace API.Controllers
         [SwaggerOperation(Summary = "Endpoint for registration.")]
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<UserDto> Register(RegisterCommand command)
+        public async Task<UserLoginDto> Register(RegisterCommand command)
         {
             return await Mediator.Send(command);
         }
 
 
-        [SwaggerOperation(Summary = "Assign user (worker) to service categories.")]
+        [SwaggerOperation(Summary = "Update user. Assign user (worker) to service categories.")]
         [HttpPut("{userId}")]
-        public async Task<IActionResult> AssignUserToServiceCategories(int userId, UpdateUserCommand command)
+        public async Task<ActionResult<UserDto>> Update(int userId, UpdateUserCommand command)
         {
             command.UserId = userId;
             await Mediator.Send(command);
@@ -38,11 +40,10 @@ namespace API.Controllers
             return NoContent();
         }
 
-
-        //[HttpGet]
-        //public async Task<ActionResult<User>> CurrentUser()
-        //{
-        //    return await Mediator.Send(new GetCurrentUserQuery());
-        //}
+        [HttpGet]
+        public async Task<IEnumerable<UserDto>> GetList()
+        {
+            return await Mediator.Send(new GetUsersListQuery());
+        }
     }
 }
