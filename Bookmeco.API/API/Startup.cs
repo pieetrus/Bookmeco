@@ -1,3 +1,4 @@
+using API.Common;
 using Application;
 using Application.Common.Interfaces;
 using FluentValidation.AspNetCore;
@@ -66,6 +67,8 @@ namespace API
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
             }
+
+            app.UseCustomExceptionHandler();
 
             app.UseHttpsRedirection();
 
