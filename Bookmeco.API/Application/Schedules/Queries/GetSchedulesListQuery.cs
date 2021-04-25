@@ -29,7 +29,6 @@ namespace Application.Schedules.Queries
         public async Task<IEnumerable<ScheduleDto>> Handle(GetSchedulesListQuery request, CancellationToken cancellationToken)
         {
             var schedules = await _context.Schedules
-                .Include(x => x.Reservations)
                 .Include(x => x.ScheduleDays)
                 .Include(x => x.User)
                 .ToListAsync(cancellationToken);

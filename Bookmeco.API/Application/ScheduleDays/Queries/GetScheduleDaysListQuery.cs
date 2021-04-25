@@ -31,6 +31,7 @@ namespace Application.ScheduleDays.Queries
         public async Task<IEnumerable<ScheduleDayDto>> Handle(GetScheduleDaysListQuery request, CancellationToken cancellationToken)
         {
             var queryable = _context.ScheduleDays
+                .Include(x => x.Reservations)
                 .Include(x => x.Schedule)
                 .AsQueryable();
 

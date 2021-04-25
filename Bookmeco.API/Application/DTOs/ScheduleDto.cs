@@ -9,6 +9,5 @@ namespace Application.DTOs
         public UserDto User { get; set; }
         public bool IsAvailable { get; set; }
         public List<int> ScheduleDayIds { get; set; }
-        public List<int> ReservationIds { get; set; }
     }
 }

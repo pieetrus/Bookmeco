@@ -14,7 +14,7 @@ namespace Application.Reservations.Commands.UpdateReservation
     public class UpdateReservationCommand : IRequest<ReservationDto>
     {
         public int Id { get; set; }
-        public int ScheduleId { get; set; } //todo: add logic for schedule
+        public int ScheduleDayId { get; set; } //todo: add logic for schedule
         public int ServiceCategoryId { get; set; }
         public int UserId { get; set; }
         public DateTime Date { get; set; }
@@ -52,10 +52,10 @@ namespace Application.Reservations.Commands.UpdateReservation
                     entity.UserId = user.Id;
                 }
 
-                if (request.ScheduleId != entity.ScheduleId &&
-                    !await _context.Schedules.AnyAsync(x => x.Id == request.ScheduleId, cancellationToken))
+                if (request.ScheduleDayId != entity.ScheduleDayId &&
+                    !await _context.ScheduleDays.AnyAsync(x => x.Id == request.ScheduleDayId, cancellationToken))
 
-                    throw new NotFoundException(nameof(Schedule), request.ScheduleId);
+                    throw new NotFoundException(nameof(ScheduleDay), request.ScheduleDayId);
 
                 if (request.ServiceCategoryId != entity.ServiceCategoryId)
                 {
@@ -75,7 +75,7 @@ namespace Application.Reservations.Commands.UpdateReservation
                         .FirstOrDefaultAsync(x => x.Id == request.ServiceCategoryId, cancellationToken);
                 }
 
-                entity.ScheduleId = request.ScheduleId;
+                entity.ScheduleDayId = request.ScheduleDayId;
                 entity.Date = request.Date;
                 entity.ServiceCategoryId = request.ServiceCategoryId;
                 entity.ReservationDuration = request.ReservationDuration ?? serviceCategory.ServiceDuration;

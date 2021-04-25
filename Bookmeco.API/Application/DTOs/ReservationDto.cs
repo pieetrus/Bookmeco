@@ -5,7 +5,7 @@ namespace Application.DTOs
     public class ReservationDto
     {
         public int Id { get; set; }
-        public int ScheduleId { get; set; }
+        public int ScheduleDayId { get; set; }
         public int ServiceCategoryId { get; set; }
         public int UserId { get; set; }
         public DateTime Date { get; set; }

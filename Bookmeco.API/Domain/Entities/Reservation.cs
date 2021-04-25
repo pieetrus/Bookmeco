@@ -10,8 +10,8 @@ namespace Domain.Entities
     public class Reservation
     {
         public int Id { get; set; }
-        public int ScheduleId { get; set; }
-        public Schedule Schedule { get; set; }
+        public int ScheduleDayId { get; set; }
+        public ScheduleDay ScheduleDay { get; set; }
         public int ServiceCategoryId { get; set; }
         public ServiceCategory ServiceCategory { get; set; }
         public int UserId { get; set; }

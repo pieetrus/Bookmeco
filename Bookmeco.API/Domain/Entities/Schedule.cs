@@ -13,6 +13,5 @@ namespace Domain.Entities
         public User User { get; set; }
         public bool IsAvailable { get; set; }
         public List<ScheduleDay> ScheduleDays { get; set; }
-        public List<Reservation> Reservations { get; set; }
     }
 }

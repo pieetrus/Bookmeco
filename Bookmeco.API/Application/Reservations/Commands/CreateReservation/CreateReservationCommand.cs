@@ -13,7 +13,7 @@ namespace Application.Reservations.Commands.CreateReservation
 {
     public class CreateReservationCommand : IRequest<ReservationDto>
     {
-        public int ScheduleId { get; set; } //todo: add logic for schedule
+        public int ScheduleDayId { get; set; } //todo: add logic for schedule
         public int ServiceCategoryId { get; set; }
         public int UserId { get; set; }
         public DateTime Date { get; set; }
@@ -41,10 +41,10 @@ namespace Application.Reservations.Commands.CreateReservation
                 if (user == null)
                     throw new NotFoundException(nameof(User), request.UserId);
 
-                var schedule = await _context.Schedules.FindAsync(request.ScheduleId);
+                var scheduleDay = await _context.ScheduleDays.FindAsync(request.ScheduleDayId);
 
-                if (schedule == null)
-                    throw new NotFoundException(nameof(Schedule), request.ScheduleId);
+                if (scheduleDay == null)
+                    throw new NotFoundException(nameof(ScheduleDay), request.ScheduleDayId);
 
                 var serviceCategory = await _context.ServiceCategories.FindAsync(request.ServiceCategoryId);
 
@@ -53,11 +53,11 @@ namespace Application.Reservations.Commands.CreateReservation
 
                 entity.User = user;
                 entity.ServiceCategory = serviceCategory;
-                entity.Schedule = schedule;
+                entity.ScheduleDay = scheduleDay;
                 entity.ReservationDuration = request.ReservationDuration ?? serviceCategory.ServiceDuration;
                 entity.Prize = request.Prize ?? serviceCategory.Prize;
                 entity.Date = request.Date;
-                 
+
                 _context.Reservations.Add(entity);
 
                 var success = await _context.SaveChangesAsync(cancellationToken) > 0;

@@ -32,7 +32,7 @@ namespace Application.Reservations.Queries
                 .Include(x => x.Opinions)
                 .Include(x => x.User)
                 .Include(x => x.ServiceCategory)
-                .Include(x => x.Schedule)
+                .Include(x => x.ScheduleDay)
                 .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
             if (entity == null)

@@ -132,9 +132,8 @@ namespace Infrastructure.Persistence
                     new ScheduleDay
                     {
                         ScheduleId = 1,
-                        BeginTime = 28800,  //  8:00
-                        EndTime = 57600, //  16:00
-                        Date =  new DateTime(2021, 12,2),
+                        BeginTime = new DateTime(2021, 12,2, 8, 0, 0),
+                        EndTime = new DateTime(2021, 12,2, 16, 0, 0),
                         DayOfWeek = DayOfWeek.Monday,
                         IsRegular = false,
                         MaxClients = 10
@@ -142,8 +141,8 @@ namespace Infrastructure.Persistence
                     new ScheduleDay
                     {
                         ScheduleId = 1,
-                        BeginTime = 28800,  //  8:00
-                        EndTime = 57600, //  16:00
+                        BeginTime = new DateTime(2021, 12,2, 10, 0, 0),
+                        EndTime = new DateTime(2021, 12,2, 18, 0, 0),
                         DayOfWeek = DayOfWeek.Monday,
                         IsRegular = false,
                         MaxClients = 10
@@ -164,7 +163,7 @@ namespace Infrastructure.Persistence
                         Prize = 15,
                         ReservationDuration = 45,
                         ServiceCategoryId = 1,
-                        ScheduleId = 1,
+                        ScheduleDayId = 1,
                         Date = DateTime.Now
                     },
                     new Reservation
@@ -173,7 +172,7 @@ namespace Infrastructure.Persistence
                         Prize = 15,
                         ReservationDuration = 45,
                         ServiceCategoryId = 1,
-                        ScheduleId = 1,
+                        ScheduleDayId = 1,
                         Date = DateTime.Now
                     }
                 };

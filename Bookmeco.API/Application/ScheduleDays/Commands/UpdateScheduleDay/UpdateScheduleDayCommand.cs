@@ -15,10 +15,9 @@ namespace Application.ScheduleDays.Commands.UpdateScheduleDay
     {
         public int Id { get; set; }
         public int ScheduleId { get; set; }
-        public int BeginTime { get; set; }
-        public int EndTime { get; set; }
+        public DateTime BeginTime { get; set; }
+        public DateTime EndTime { get; set; }
         public DayOfWeek? DayOfWeek { get; set; }
-        public DateTime? Date { get; set; }
         public bool IsRegular { get; set; }
         public int? MaxClients { get; set; }
 
@@ -49,7 +48,6 @@ namespace Application.ScheduleDays.Commands.UpdateScheduleDay
                 entity.BeginTime = request.BeginTime;
                 entity.EndTime = request.EndTime;
                 entity.DayOfWeek = request.DayOfWeek;
-                entity.Date = request.Date;
                 entity.IsRegular = request.IsRegular;
                 entity.MaxClients = request.MaxClients;
 

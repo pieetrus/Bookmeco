@@ -27,7 +27,9 @@ namespace Application.Common.Mappings
             CreateMap<Opinion, OpinionDto>();
             CreateMap<Reservation, ReservationDto>();
             CreateMap<ReservationDto, Reservation>();
-            CreateMap<ScheduleDay, ScheduleDayDto>();
+            CreateMap<ScheduleDay, ScheduleDayDto>()
+                .ForMember(x => x.ReservationIds,
+                    x => x.MapFrom(c => c.Reservations.Select(x => x.Id)));
             CreateMap<Role, RoleDto>()
                 .ForMember(x => x.UserIds,
                 x => x.MapFrom(c => c.Users.Select(x => x.Id)));
@@ -36,8 +38,6 @@ namespace Application.Common.Mappings
                 x => x.MapFrom(c => c.ServiceCategories.Select(x => x.Id)));
             CreateMap<User, UserLoginDto>();
             CreateMap<Schedule, ScheduleDto>()
-                .ForMember(x => x.ReservationIds,
-                    x => x.MapFrom(c => c.Reservations.Select(x => x.Id)))
                 .ForMember(x => x.ScheduleDayIds,
                     x => x.MapFrom(c => c.ScheduleDays.Select(x => x.Id)));
             CreateMap<ServiceCategory, ServiceCategoryDto>()
