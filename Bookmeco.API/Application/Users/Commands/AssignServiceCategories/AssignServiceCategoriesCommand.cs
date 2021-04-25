@@ -33,6 +33,8 @@ namespace Application.Users.Commands.AssignServiceCategories
                 List<ServiceCategory> serviceCategoriesDb = null;
 
                 var user = await _context.Users
+                    .Include(x => x.Reservations)
+                    .Include(x => x.Schedules)
                     .Include(x => x.ServiceCategories)
                     .Include(x => x.Roles)
                     .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);

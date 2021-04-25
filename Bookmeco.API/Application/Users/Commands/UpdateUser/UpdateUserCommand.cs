@@ -32,7 +32,12 @@ namespace Application.Users.Commands.UpdateUser
 
             public async Task<UserDto> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
             {
-                var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
+                var user = await _context.Users
+                    .Include(x => x.Roles)
+                    .Include(x => x.ServiceCategories)
+                    .Include(x => x.Reservations)
+                    .Include(x => x.Schedules)
+                    .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
 
                 if (user == null)
                     throw new NotFoundException(nameof(User), request.UserId);

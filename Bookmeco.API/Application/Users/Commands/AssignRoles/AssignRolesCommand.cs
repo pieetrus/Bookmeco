@@ -35,6 +35,8 @@ namespace Application.Users.Commands.AssignRoles
                 var user = await _context.Users
                     .Include(x => x.Roles)
                     .Include(x => x.ServiceCategories)
+                    .Include(x => x.Reservations)
+                    .Include(x => x.Schedules)
                     .FirstOrDefaultAsync(x => x.Id == request.UserId, cancellationToken);
 
                 if (request.RoleIds != null && request.RoleIds.Any())

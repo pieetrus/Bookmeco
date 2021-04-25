@@ -30,6 +30,8 @@ namespace Application.Users.Queries
         public async Task<UserDto> Handle(GetUserDetailQuery request, CancellationToken cancellationToken)
         {
             var entity = await _context.Users
+                .Include(x => x.Reservations)
+                .Include(x => x.Schedules)
                 .Include(x => x.Roles)
                 .Include(x => x.UserCompanies)
                 .Include(x => x.ServiceCategories)

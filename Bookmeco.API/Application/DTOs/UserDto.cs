@@ -12,5 +12,7 @@ namespace Application.DTOs
         public string Email { get; set; }
         public List<string> Roles { get; set; }
         public List<int> ServiceCategoriesIds { get; set; }
+        public List<int> ScheduleIds { get; set; }
+        public List<int> ReservationIds { get; set; }
     }
 }

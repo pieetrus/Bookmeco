@@ -36,6 +36,8 @@ namespace Application.Users.Queries
         public async Task<IEnumerable<UserDto>> Handle(GetUsersListQuery request, CancellationToken cancellationToken)
         {
             var queryable = _context.Users
+                .Include(x => x.Reservations)
+                .Include(x => x.Schedules)
                 .Include(x => x.Roles)
                 .Include(x => x.UserCompanies)
                 .Include(x => x.ServiceCategories)

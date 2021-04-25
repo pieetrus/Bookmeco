@@ -35,7 +35,11 @@ namespace Application.Common.Mappings
                 x => x.MapFrom(c => c.Users.Select(x => x.Id)));
             CreateMap<User, UserDto>()
                 .ForMember(x => x.ServiceCategoriesIds,
-                x => x.MapFrom(c => c.ServiceCategories.Select(x => x.Id)));
+                    x => x.MapFrom(c => c.ServiceCategories.Select(x => x.Id)))
+                .ForMember(x => x.ReservationIds,
+                    x => x.MapFrom(c => c.Reservations.Select(x => x.Id)))
+                .ForMember(x => x.ScheduleIds,
+                    x => x.MapFrom(c => c.Schedules.Select(x => x.Id)));
             CreateMap<User, UserLoginDto>();
             CreateMap<Schedule, ScheduleDto>()
                 .ForMember(x => x.ScheduleDayIds,
