@@ -2,6 +2,7 @@
 using Application.Common.Interfaces;
 using Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,7 +25,7 @@ namespace Application.ServiceCategories.Commands.DeleteServiceCategory
 
         public async Task<Unit> Handle(DeleteServiceCategoryCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _context.ServiceCategories.FindAsync(request.Id, cancellationToken);
+            var entity = await _context.ServiceCategories.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
             if (entity == null)
             {

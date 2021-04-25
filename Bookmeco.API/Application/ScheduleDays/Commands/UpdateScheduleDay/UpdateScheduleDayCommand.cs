@@ -39,7 +39,7 @@ namespace Application.ScheduleDays.Commands.UpdateScheduleDay
                     .FindAsync(request.Id);
 
                 if (entity == null)
-                    throw new NotFoundException(nameof(Schedule), request.Id);
+                    throw new NotFoundException(nameof(ScheduleDay), request.Id);
 
                 if (request.ScheduleId != entity.ScheduleId
                     && !await _context.Schedules.AnyAsync(x => x.Id == request.ScheduleId))

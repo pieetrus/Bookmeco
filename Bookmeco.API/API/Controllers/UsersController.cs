@@ -1,9 +1,12 @@
 ﻿using Application.DTOs;
+using Application.Users.Commands.AssignRoles;
+using Application.Users.Commands.AssignServiceCategories;
 using Application.Users.Commands.Register;
 using Application.Users.Commands.UpdateUser;
 using Application.Users.Queries;
 using Application.Users.Queries.Login;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
@@ -30,20 +33,43 @@ namespace API.Controllers
         }
 
 
-        [SwaggerOperation(Summary = "Update user. Assign user (worker) to service categories.")]
-        [HttpPut("{userId}")]
-        public async Task<ActionResult<UserDto>> Update(int userId, UpdateUserCommand command)
+        [SwaggerOperation(Summary = "Update user.")]
+        [HttpPut]
+        public async Task<ActionResult<UserDto>> Update(UpdateUserCommand command)
         {
-            command.UserId = userId;
-            await Mediator.Send(command);
+            var user = await Mediator.Send(command);
 
-            return NoContent();
+            return Ok(user);
         }
 
+        [SwaggerOperation(Summary = "Get users/workers list.")]
         [HttpGet]
-        public async Task<IEnumerable<UserDto>> GetList()
+        public async Task<IEnumerable<UserDto>> GetList(int? companyId)
         {
-            return await Mediator.Send(new GetUsersListQuery());
+            return await Mediator.Send(new GetUsersListQuery(companyId));
+        }
+
+
+        [SwaggerOperation(Summary = "Assign roles to user")]
+        [HttpPut("roles")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<RoleDto>> AssignRolesToUser([FromBody] AssignRolesCommand command)
+        {
+            var role = await Mediator.Send(command);
+
+            return Ok(role);
+        }
+
+        [SwaggerOperation(Summary = "Assign service categories to user (worker)")]
+        [HttpPut("serviceCategories")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult<RoleDto>> AssignServiceCategoriesToUser([FromBody] AssignServiceCategoriesCommand command)
+        {
+            var role = await Mediator.Send(command);
+
+            return Ok(role);
         }
     }
 }

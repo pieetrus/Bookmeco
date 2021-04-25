@@ -31,7 +31,9 @@ namespace Application.UserCompanies.Commands.UpdateUserCompany
 
             public async Task<UserCompanyDto> Handle(UpdateUserCompanyCommand request, CancellationToken cancellationToken)
             {
-                var entity = await _context.UserCompanies.FindAsync(request.Id);
+                var entity = await _context.UserCompanies
+                    .Include(x => x.AccessType)
+                    .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
                 if (entity == null)
                     throw new NotFoundException(nameof(UserCompany), request.Id);

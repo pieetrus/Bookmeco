@@ -6,10 +6,15 @@ namespace Application.DTOs
     {
         public int Id { get; set; }
         public int ScheduleId { get; set; }
-        public DateTime BeginTime { get; set; }
-        public DateTime EndTime { get; set; }
-        public ScheduleDto Schedule { get; set; }
-        public DayOfWeek DayOfWeek { get; set; }
+        /// <summary>
+        /// Seconds past 0:00
+        /// </summary>
+        public int BeginTime { get; set; }
+        /// <summary>
+        /// Seconds past 0:00
+        /// </summary>
+        public int EndTime { get; set; }
+        public DayOfWeek? DayOfWeek { get; set; }
         public DateTime? Date { get; set; }
         public bool IsRegular { get; set; }
         public int? MaxClients { get; set; }

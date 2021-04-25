@@ -1,5 +1,7 @@
 ﻿using Application.Common.Exceptions;
 using Application.Common.Interfaces;
+using Application.DTOs;
+using AutoMapper;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -9,22 +11,24 @@ using System.Threading.Tasks;
 
 namespace Application.UserCompanies.Commands.CreateUserCompany
 {
-    public class CreateUserCompanyCommand : IRequest<int>
+    public class CreateUserCompanyCommand : IRequest<UserCompanyDto>
     {
         public int UserId { get; set; }
         public int CompanyId { get; set; }
         public int AccessTypeId { get; set; }
 
-        public class Handler : IRequestHandler<CreateUserCompanyCommand, int>
+        public class Handler : IRequestHandler<CreateUserCompanyCommand, UserCompanyDto>
         {
             private readonly IDataContext _context;
+            private readonly IMapper _mapper;
 
-            public Handler(IDataContext context)
+            public Handler(IDataContext context, IMapper mapper)
             {
                 _context = context;
+                _mapper = mapper;
             }
 
-            public async Task<int> Handle(CreateUserCompanyCommand request, CancellationToken cancellationToken)
+            public async Task<UserCompanyDto> Handle(CreateUserCompanyCommand request, CancellationToken cancellationToken)
             {
 
                 if (!await _context.Users.AnyAsync(x => x.Id == request.UserId))
@@ -47,7 +51,13 @@ namespace Application.UserCompanies.Commands.CreateUserCompany
 
                 var success = await _context.SaveChangesAsync(cancellationToken) > 0;
 
-                if (success) return entity.Id;
+                var accessType =
+                    await _context.UserCompanyAccessTypes.FirstOrDefaultAsync(x => x.Id == entity.AccessTypeId,
+                        cancellationToken);
+
+                entity.AccessType = accessType;
+
+                if (success) return _mapper.Map<UserCompany, UserCompanyDto>(entity);
 
                 throw new Exception("Problem saving changes");
             }

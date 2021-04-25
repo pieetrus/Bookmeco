@@ -27,6 +27,7 @@ namespace Application.Common.Mappings
             CreateMap<Opinion, OpinionDto>();
             CreateMap<Reservation, ReservationDto>();
             CreateMap<ReservationDto, Reservation>();
+            CreateMap<ScheduleDay, ScheduleDayDto>();
             CreateMap<Role, RoleDto>()
                 .ForMember(x => x.UserIds,
                 x => x.MapFrom(c => c.Users.Select(x => x.Id)));

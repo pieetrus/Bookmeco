@@ -7,7 +7,6 @@ using Application.CompaniesContent.Commands.DeleteCompanyContent;
 using Application.CompaniesContent.Commands.UpdateCompanyContent;
 using Application.CompaniesContent.Queries;
 using Application.DTOs;
-using Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -20,7 +19,7 @@ namespace API.Controllers
     {
         [SwaggerOperation(Summary = "Get companies list")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Company>>> GetAll()
+        public async Task<ActionResult<IEnumerable<CompanyDto>>> GetAll()
         {
             return Ok(await Mediator.Send(new GetCompaniesListQuery()));
         }
