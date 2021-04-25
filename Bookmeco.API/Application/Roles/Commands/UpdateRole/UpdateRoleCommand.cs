@@ -5,7 +5,6 @@ using AutoMapper;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -42,11 +41,10 @@ namespace Application.Roles.Commands.UpdateRole
                 entity.AccessLevel = request.AccessLevel;
                 entity.NormalizedName = request.Name.ToUpper();
 
-                var success = await _context.SaveChangesAsync(cancellationToken) > 0;
+                await _context.SaveChangesAsync(cancellationToken);
 
-                if (success) return _mapper.Map<Role, RoleDto>(entity);
+                return _mapper.Map<Role, RoleDto>(entity);
 
-                throw new Exception("Problem saving changes");
             }
         }
     }

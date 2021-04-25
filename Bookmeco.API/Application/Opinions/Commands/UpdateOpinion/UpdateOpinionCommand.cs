@@ -83,11 +83,9 @@ namespace Application.Opinions.Commands.UpdateOpinion
                 entity.RateValue = request.RateValue;
                 entity.Date = DateTime.Now;
 
-                var success = await _context.SaveChangesAsync(cancellationToken) > 0;
+                await _context.SaveChangesAsync(cancellationToken);
 
-                if (success) return _mapper.Map<Opinion, OpinionDto>(entity);
-
-                throw new Exception("Problem saving changes");
+                return _mapper.Map<Opinion, OpinionDto>(entity);
             }
         }
     }

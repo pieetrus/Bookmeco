@@ -4,7 +4,6 @@ using Application.DTOs;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -41,11 +40,9 @@ namespace Application.ServiceCategories.Commands.UpdateServiceCategory
                 entity.Prize = request.Prize;
                 entity.ServiceDuration = request.ServiceDuration;
 
-                var success = await _context.SaveChangesAsync(cancellationToken) > 0;
+                await _context.SaveChangesAsync(cancellationToken);
 
-                if (success) return _mapper.Map<ServiceCategory, ServiceCategoryDto>(entity);
-
-                throw new Exception("Problem saving changes");
+                return _mapper.Map<ServiceCategory, ServiceCategoryDto>(entity);
             }
         }
     }

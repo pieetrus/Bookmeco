@@ -43,7 +43,7 @@ namespace Application.ScheduleDays.Commands.UpdateScheduleDay
 
                 if (request.ScheduleId != entity.ScheduleId
                     && !await _context.Schedules.AnyAsync(x => x.Id == request.ScheduleId))
-                        throw new NotFoundException(nameof(ScheduleDay), request.ScheduleId);
+                    throw new NotFoundException(nameof(ScheduleDay), request.ScheduleId);
 
                 entity.ScheduleId = request.ScheduleId;
                 entity.BeginTime = request.BeginTime;
@@ -53,11 +53,9 @@ namespace Application.ScheduleDays.Commands.UpdateScheduleDay
                 entity.IsRegular = request.IsRegular;
                 entity.MaxClients = request.MaxClients;
 
-                var success = await _context.SaveChangesAsync(cancellationToken) > 0;
+                await _context.SaveChangesAsync(cancellationToken);
 
-                if (success) return _mapper.Map<ScheduleDay, ScheduleDayDto>(entity);
-
-                throw new Exception("Problem saving changes");
+                return _mapper.Map<ScheduleDay, ScheduleDayDto>(entity);
             }
         }
     }

@@ -49,14 +49,14 @@ namespace Application.CompanyCategories.Commands.UpdateCompanyCategory
                 if (entity.SuperCompanyCategoryId != request.SuperCompanyCategoryId &&
                     request.SuperCompanyCategoryId != null)
                 {
-                     superCategory = await _context.CompanyCategories
-                        .FirstOrDefaultAsync(x => x.Id == request.SuperCompanyCategoryId, cancellationToken);
+                    superCategory = await _context.CompanyCategories
+                       .FirstOrDefaultAsync(x => x.Id == request.SuperCompanyCategoryId, cancellationToken);
 
                     if (superCategory == null)
                         throw new NotFoundException(nameof(CompanyCategory), request.Id);
                 }
 
-                if (request.CompanyIds != null 
+                if (request.CompanyIds != null
                     && request.CompanyIds.Any()
                     && request.CompanyIds != entity.Companies.Select(x => x.Id))
                 {
@@ -72,11 +72,9 @@ namespace Application.CompanyCategories.Commands.UpdateCompanyCategory
                 entity.SuperCompanyCategoryId = superCategory?.Id;
                 entity.Companies = companies;
 
-                var success = await _context.SaveChangesAsync(cancellationToken) > 0;
+                await _context.SaveChangesAsync(cancellationToken);
 
-                if (success) return _mapper.Map< CompanyCategory,CompanyCategoryDto>(entity);
-
-                throw new Exception("Problem saving changes");
+                return _mapper.Map<CompanyCategory, CompanyCategoryDto>(entity);
             }
         }
     }

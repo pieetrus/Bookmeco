@@ -5,7 +5,6 @@ using AutoMapper;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -47,11 +46,10 @@ namespace Application.Companies.Commands.UpdateCompany
                 entity.Latitude = request.Latitude;
                 entity.Longitude = request.Longitude;
 
-                var success = await _context.SaveChangesAsync(cancellationToken) > 0;
+                await _context.SaveChangesAsync(cancellationToken);
 
-                if (success) return _mapper.Map<Company, CompanyDto>(entity);
+                return _mapper.Map<Company, CompanyDto>(entity);
 
-                throw new Exception("Problem saving changes");
             }
         }
     }

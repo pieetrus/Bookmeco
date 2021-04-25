@@ -4,7 +4,6 @@ using Application.DTOs;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -39,11 +38,9 @@ namespace Application.UserCompanyAccessTypes.Commands.UpdateUserCompanyAccessTyp
                 entity.AccessLevel = request.AccessLevel;
                 entity.Name = request.Name;
 
-                var success = await _context.SaveChangesAsync(cancellationToken) > 0;
+                await _context.SaveChangesAsync(cancellationToken);
 
-                if (success) return _mapper.Map<UserCompanyAccessType, UserCompanyAccessTypeDto>(entity);
-
-                throw new Exception("Problem saving changes");
+                return _mapper.Map<UserCompanyAccessType, UserCompanyAccessTypeDto>(entity);
             }
         }
     }

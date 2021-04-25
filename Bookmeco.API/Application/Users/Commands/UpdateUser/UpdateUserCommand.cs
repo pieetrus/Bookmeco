@@ -6,7 +6,6 @@ using Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
@@ -66,11 +65,9 @@ namespace Application.Users.Commands.UpdateUser
                 user.PhoneNumber = request.PhoneNumber ?? user.PhoneNumber;
                 user.Email = request.Email ?? user.Email;
 
-                var success = await _context.SaveChangesAsync(cancellationToken) > 0;
+                await _context.SaveChangesAsync(cancellationToken);
 
-                if (success) return _mapper.Map<User, UserDto>(user);
-
-                throw new Exception("Problem saving changes");
+                return _mapper.Map<User, UserDto>(user);
             }
         }
     }

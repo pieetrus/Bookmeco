@@ -3,6 +3,7 @@ using Domain.Common;
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,7 +14,6 @@ namespace Infrastructure.Persistence
     {
         public DataContext(DbContextOptions options) : base(options)
         {
-
         }
 
         public DbSet<Company> Companies { get; set; }
@@ -55,5 +55,6 @@ namespace Infrastructure.Persistence
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(DataContext).Assembly);
         }
+
     }
 }

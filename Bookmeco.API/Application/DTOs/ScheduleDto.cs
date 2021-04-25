@@ -1,5 +1,4 @@
-﻿using Domain.Entities;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Application.DTOs
 {
@@ -7,9 +6,9 @@ namespace Application.DTOs
     {
         public int Id { get; set; }
         public int UserId { get; set; }
-        public User User { get; set; }
+        public UserDto User { get; set; }
         public bool IsAvailable { get; set; }
-        public List<ScheduleDay> ScheduleDays { get; set; }
-        public List<Reservation> Reservations { get; set; }
+        public List<int> ScheduleDayIds { get; set; }
+        public List<int> ReservationIds { get; set; }
     }
 }

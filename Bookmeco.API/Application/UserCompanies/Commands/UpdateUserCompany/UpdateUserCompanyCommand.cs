@@ -5,7 +5,6 @@ using AutoMapper;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -50,11 +49,9 @@ namespace Application.UserCompanies.Commands.UpdateUserCompany
                 entity.CompanyId = request.CompanyId ?? entity.CompanyId;
                 entity.AccessTypeId = request.AccessTypeId ?? entity.AccessTypeId;
 
-                var success = await _context.SaveChangesAsync(cancellationToken) > 0;
+                await _context.SaveChangesAsync(cancellationToken);
 
-                if (success) return _mapper.Map<UserCompany, UserCompanyDto>(entity);
-
-                throw new Exception("Problem saving changes");
+                return _mapper.Map<UserCompany, UserCompanyDto>(entity);
             }
         }
     }

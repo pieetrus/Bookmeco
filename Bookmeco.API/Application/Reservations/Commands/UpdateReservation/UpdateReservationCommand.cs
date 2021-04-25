@@ -52,9 +52,10 @@ namespace Application.Reservations.Commands.UpdateReservation
                     entity.UserId = user.Id;
                 }
 
-                if (request.ScheduleId != entity.ScheduleId && 
+                if (request.ScheduleId != entity.ScheduleId &&
                     !await _context.Schedules.AnyAsync(x => x.Id == request.ScheduleId, cancellationToken))
-                        throw new NotFoundException(nameof(Schedule), request.ScheduleId);
+
+                    throw new NotFoundException(nameof(Schedule), request.ScheduleId);
 
                 if (request.ServiceCategoryId != entity.ServiceCategoryId)
                 {
@@ -80,11 +81,9 @@ namespace Application.Reservations.Commands.UpdateReservation
                 entity.ReservationDuration = request.ReservationDuration ?? serviceCategory.ServiceDuration;
                 entity.Prize = request.Prize ?? serviceCategory.Prize;
 
-                var success = await _context.SaveChangesAsync(cancellationToken) > 0;
+                await _context.SaveChangesAsync(cancellationToken);
 
-                if (success) return _mapper.Map<Reservation, ReservationDto>(entity);
-
-                throw new Exception("Problem saving changes");
+                return _mapper.Map<Reservation, ReservationDto>(entity);
             }
         }
     }

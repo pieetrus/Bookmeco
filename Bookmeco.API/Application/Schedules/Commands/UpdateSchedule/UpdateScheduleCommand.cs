@@ -5,8 +5,6 @@ using AutoMapper;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -31,7 +29,9 @@ namespace Application.Schedules.Commands.UpdateSchedule
 
             public async Task<ScheduleDto> Handle(UpdateScheduleCommand request, CancellationToken cancellationToken)
             {
-                var entity = await _context.Schedules.FindAsync(request.Id);
+                var entity = await _context.Schedules
+                    .Include(x => x.User)
+                    .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
                 if (entity == null)
                 {
@@ -47,11 +47,9 @@ namespace Application.Schedules.Commands.UpdateSchedule
                 entity.UserId = request.UserId;
                 entity.IsAvailable = request.IsAvailable;
 
-                var success = await _context.SaveChangesAsync(cancellationToken) > 0;
+                await _context.SaveChangesAsync(cancellationToken);
 
-                if (success) return _mapper.Map<Schedule, ScheduleDto>(entity);
-
-                throw new Exception("Problem saving changes");
+                return _mapper.Map<Schedule, ScheduleDto>(entity);
             }
         }
     }

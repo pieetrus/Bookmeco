@@ -3,6 +3,7 @@ using Application.DTOs;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -36,7 +37,11 @@ namespace Application.Schedules.Commands.CreateSchedule
 
                 _context.Schedules.Add(entity);
 
+
                 var success = await _context.SaveChangesAsync(cancellationToken) > 0;
+
+                var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == entity.UserId, cancellationToken);
+                entity.User = user;
 
                 if (success) return _mapper.Map<Schedule, ScheduleDto>(entity);
 
